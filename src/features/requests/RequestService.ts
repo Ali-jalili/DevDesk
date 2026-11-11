@@ -1,6 +1,26 @@
 /** @format */
 
 import supabase from "@/lib/supabase";
+import type { Json, KeyValueMap, Requests, RequestRecord } from "@/types/database";
+
+function toKeyValueMap(value: Json | null): KeyValueMap | null {
+  if (value === null) return null;
+  if (typeof value !== "object" || Array.isArray(value)) return {};
+
+  return Object.fromEntries(
+    Object.entries(value).filter((entry): entry is [string, string] =>
+      typeof entry[1] === "string",
+    ),
+  );
+}
+
+function toRequestRecord(row: Requests): RequestRecord {
+  return {
+    ...row,
+    headers: toKeyValueMap(row.headers),
+    params: toKeyValueMap(row.params),
+  };
+}
 
 async function createRequest({
   name,
@@ -54,7 +74,7 @@ async function getRequests(collectionId: string) {
 
   if (error) throw new Error(error.message);
 
-  return data;
+  return data.map(toRequestRecord);
 }
 
 async function getRequestById(requestId: string) {
@@ -65,7 +85,7 @@ async function getRequestById(requestId: string) {
     .single();
   if (error) throw new Error(error.message);
 
-  return data;
+  return toRequestRecord(data);
 }
 
 async function updateRequest(
@@ -94,7 +114,7 @@ async function updateRequest(
     throw new Error(error.message);
   }
 
-  return data;
+  return toRequestRecord(data);
 }
 
 async function deleteRequest(requestId: string) {

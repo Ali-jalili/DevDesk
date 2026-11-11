@@ -1,94 +1,28 @@
 /** @format */
 
-/**
- * Central domain types for the DevDesk Supabase schema.
- * Mirrors the live database (see supabase/migrations/) so the Supabase
- * client and every service share one source of truth instead of
- * copy-pasted local types.
- */
+/** Supabase/Postgres JSON value. */
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[];
 
-export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
-
-export type Workspaces = {
-  id: string;
-  user_id: string;
-  name: string | null;
-  description: string | null;
-  created_at: string;
-  updated_at: string | null;
-  active_environment_id: string | null;
-}
-
-export type Collections = {
-  id: string;
-  workspace_id: string | null;
-  name: string | null;
-  description: string | null;
-  created_at: string;
-  updated_at: string | null;
-}
-
-export type Requests = {
-  id: string;
-  name: string | null;
-  method: string | null;
-  url: string | null;
-  headers: Record<string, string> | null;
-  params: Record<string, string> | null;
-  body: string | null;
-  description: string | null;
-  collection_id: string | null;
-  updated_at: string | null;
-  created_at: string;
-  example_request: string | null;
-  example_response: string | null;
-  notes: string | null;
-}
-
-export type RequestRecord = Requests;
-export type WorkspaceRecord = Workspaces;
-export type CollectionRecord = Collections;
-export type EnvironmentRecord = Environments;
-export type EnvironmentVariableRecord = EnvironmentVariables;
-export type CollectionWithRequestCount = Collections & { requests: { count: number } };
-export type RequestFormData = {
-  name: string;
-  method: string;
-  url: string;
-  headers: { key: string; value: string }[];
-  params: { key: string; value: string }[];
-  body: string;
-  description: string;
-  example_request: string;
-  example_response: string;
-  notes: string;
-};
-
-export type Environments = {
-  id: string;
-  name: string;
-  workspace_id: string;
-  created_at: string | null;
-}
-
-export type EnvironmentVariables = {
-  id: string;
-  environment_id: string;
-  key: string;
-  value: string;
-  created_at: string | null;
-}
-
-/**
- * Database type passed to createClient<Database>().
- * Row/Insert/Update per table, plus the table relationships that the
- * generated client uses for joined selects like .select("*, requests(count)").
- */
+/** Generated-style Supabase schema types based on the supplied live schema. */
 export type Database = {
   public: {
     Tables: {
       workspaces: {
-        Row: Workspaces;
+        Row: {
+          id: string;
+          user_id: string;
+          name: string | null;
+          description: string | null;
+          created_at: string;
+          updated_at: string | null;
+          active_environment_id: string | null;
+        };
         Insert: {
           id?: string;
           user_id: string;
@@ -118,10 +52,17 @@ export type Database = {
         ];
       };
       collections: {
-        Row: Collections;
+        Row: {
+          id: string;
+          workspace_id: string | null;
+          name: string | null;
+          description: string | null;
+          created_at: string;
+          updated_at: string | null;
+        };
         Insert: {
           id?: string;
-          workspace_id: string | null;
+          workspace_id?: string | null;
           name?: string | null;
           description?: string | null;
           created_at?: string;
@@ -143,27 +84,35 @@ export type Database = {
             referencedRelation: "workspaces";
             referencedColumns: ["id"];
           },
-          {
-            foreignKeyName: "fk_requests_collection_id";
-            columns: ["id"];
-            isOneToOne: false;
-            referencedRelation: "requests";
-            referencedColumns: ["collection_id"];
-          },
         ];
       };
       requests: {
-        Row: Requests;
+        Row: {
+          id: string;
+          name: string | null;
+          method: string | null;
+          url: string | null;
+          headers: Json | null;
+          params: Json | null;
+          body: string | null;
+          description: string | null;
+          collection_id: string | null;
+          updated_at: string | null;
+          created_at: string;
+          example_request: string | null;
+          example_response: string | null;
+          notes: string | null;
+        };
         Insert: {
           id?: string;
           name?: string | null;
           method?: string | null;
           url?: string | null;
-          headers?: Record<string, string> | null;
-          params?: Record<string, string> | null;
+          headers?: Json | null;
+          params?: Json | null;
           body?: string | null;
           description?: string | null;
-          collection_id: string | null;
+          collection_id?: string | null;
           updated_at?: string | null;
           created_at?: string;
           example_request?: string | null;
@@ -175,8 +124,8 @@ export type Database = {
           name?: string | null;
           method?: string | null;
           url?: string | null;
-          headers?: Record<string, string> | null;
-          params?: Record<string, string> | null;
+          headers?: Json | null;
+          params?: Json | null;
           body?: string | null;
           description?: string | null;
           collection_id?: string | null;
@@ -197,7 +146,12 @@ export type Database = {
         ];
       };
       environments: {
-        Row: Environments;
+        Row: {
+          id: string;
+          name: string;
+          workspace_id: string;
+          created_at: string | null;
+        };
         Insert: {
           id?: string;
           name: string;
@@ -218,17 +172,16 @@ export type Database = {
             referencedRelation: "workspaces";
             referencedColumns: ["id"];
           },
-          {
-            foreignKeyName: "environment_variables_environment_id_fkey";
-            columns: ["id"];
-            isOneToOne: false;
-            referencedRelation: "environment_variables";
-            referencedColumns: ["environment_id"];
-          },
         ];
       };
       environment_variables: {
-        Row: EnvironmentVariables;
+        Row: {
+          id: string;
+          environment_id: string;
+          key: string;
+          value: string;
+          created_at: string | null;
+        };
         Insert: {
           id?: string;
           environment_id: string;
@@ -254,17 +207,46 @@ export type Database = {
         ];
       };
     };
-    Views: {
-      [_ in never]: never;
-    };
-    Functions: {
-      [_ in never]: never;
-    };
-    Enums: {
-      [_ in never]: never;
-    };
-    CompositeTypes: {
-      [_ in never]: never;
-    };
+    Views: { [_ in never]: never };
+    Functions: { [_ in never]: never };
+    Enums: { [_ in never]: never };
+    CompositeTypes: { [_ in never]: never };
   };
-}
+};
+
+export type PublicTableName = keyof Database["public"]["Tables"];
+export type TableRow<T extends PublicTableName> = Database["public"]["Tables"][T]["Row"];
+export type TablesInsert<T extends PublicTableName> = Database["public"]["Tables"][T]["Insert"];
+export type TablesUpdate<T extends PublicTableName> = Database["public"]["Tables"][T]["Update"];
+
+export type Workspaces = TableRow<"workspaces">;
+export type Collections = TableRow<"collections">;
+export type Requests = TableRow<"requests">;
+export type Environments = TableRow<"environments">;
+export type EnvironmentVariables = TableRow<"environment_variables">;
+
+export type KeyValueMap = Record<string, string>;
+export type RequestRecord = Omit<Requests, "headers" | "params"> & {
+  headers: KeyValueMap | null;
+  params: KeyValueMap | null;
+};
+export type WorkspaceRecord = Workspaces;
+export type CollectionRecord = Collections;
+export type EnvironmentRecord = Environments;
+export type EnvironmentVariableRecord = EnvironmentVariables;
+export type CollectionWithRequestCount = Collections & {
+  requests: { count: number }[];
+};
+
+export type RequestFormData = {
+  name: string;
+  method: string;
+  url: string;
+  headers: { key: string; value: string }[];
+  params: { key: string; value: string }[];
+  body: string;
+  description: string;
+  example_request: string;
+  example_response: string;
+  notes: string;
+};

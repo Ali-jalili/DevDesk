@@ -219,7 +219,7 @@ function CollectionList({ collections }: CollectionListProps) {
               <p className="text-xs text-slate-400">API Requests</p>
 
               <p className="mt-1 text-sm font-semibold text-slate-700">
-                {item.requests?.count ?? 0}
+                {item.requests?.[0]?.count ?? 0}
               </p>
             </div>
 
