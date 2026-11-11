@@ -11,7 +11,7 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 
 export type Workspaces = {
   id: string;
-  user_id: string | null;
+  user_id: string;
   name: string | null;
   description: string | null;
   created_at: string;
@@ -91,7 +91,7 @@ export type Database = {
         Row: Workspaces;
         Insert: {
           id?: string;
-          user_id: string | null;
+          user_id: string;
           name?: string | null;
           description?: string | null;
           created_at?: string;
@@ -100,7 +100,7 @@ export type Database = {
         };
         Update: {
           id?: string;
-          user_id?: string | null;
+          user_id?: string;
           name?: string | null;
           description?: string | null;
           created_at?: string;

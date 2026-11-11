@@ -15,6 +15,11 @@ function useDeleteWorkspace() {
       queryClient.invalidateQueries({
         queryKey: ["workspaces"],
       });
+      queryClient.invalidateQueries({ queryKey: ["workspaceDetails"] });
+      queryClient.invalidateQueries({ queryKey: ["collections"] });
+      queryClient.invalidateQueries({ queryKey: ["requests"] });
+      queryClient.invalidateQueries({ queryKey: ["environments"] });
+      queryClient.invalidateQueries({ queryKey: ["environment_variables"] });
       toast.success("Workspace deleted successfully");
     },
 

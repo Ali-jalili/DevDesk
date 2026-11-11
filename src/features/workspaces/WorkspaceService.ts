@@ -6,10 +6,13 @@ async function createWorkspace(
   workspaceName: string,
   workspaceDescription: string,
 ) {
-  const { data: authData } = await supabase.auth.getUser();
+  const { data: authData, error: authError } = await supabase.auth.getUser();
+
+  if (authError) throw new Error(authError.message);
+  if (!authData.user) throw new Error("You must be signed in to create a workspace.");
 
   const { data, error } = await supabase.from("workspaces").insert({
-    user_id: authData.user?.id ?? null,
+    user_id: authData.user.id,
     name: workspaceName,
     description: workspaceDescription,
   });
