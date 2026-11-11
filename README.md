@@ -1,75 +1,66 @@
-# React + TypeScript + Vite
+# DevDesk
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+DevDesk is a small API workspace for organizing HTTP requests, collections, and environment variables. Requests can use `{{variable}}` placeholders and be sent through a Supabase Edge Function proxy, with the response status and body shown in the app.
 
-Currently, two official plugins are available:
+![DevDesk application](./screenshots/devdesk-home.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- Create workspaces, collections, and saved API requests.
+- Store headers, query parameters, request bodies, and request notes.
+- Define environment variables and select an active environment per workspace.
+- Substitute `{{variable}}` values in a request before sending it.
+- Send requests through the `send-request` Supabase Edge Function and inspect the response.
+- Sign in and persist application data with Supabase Auth and Postgres.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Requirements
 
-## Expanding the ESLint configuration
+- Node.js 22 or newer
+- pnpm 10
+- A Supabase project with the database schema and migrations applied
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Local setup
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```sh
+pnpm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Copy `.env.example` to `.env`, then set the Supabase project URL and anon key:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```dotenv
+VITE_SUPABASE_URL=https://your-project-ref.supabase.co
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
 ```
+
+Start the development server:
+
+```sh
+pnpm dev
+```
+
+## Supabase setup
+
+Apply the SQL migration in `supabase/migrations` to your project. Deploy the Edge Function so the Send button can proxy requests:
+
+```sh
+supabase login
+supabase link --project-ref your-project-ref
+supabase functions deploy send-request
+```
+
+The function accepts authenticated Supabase function invocations, handles CORS preflight requests, and blocks common local/private IPv4 destinations. Avoid placing secrets in requests that may be shared with other workspace members.
+
+## Quality checks
+
+```sh
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm build
+```
+
+GitHub Actions runs these four checks for pushes and pull requests.
+
+## License
+
+MIT. See [LICENSE](./LICENSE).

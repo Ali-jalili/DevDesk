@@ -77,7 +77,7 @@ export async function getWorkspaceSnapshot(
     ...(environmentData ?? []).map((item) => item.created_at),
   ].filter(Boolean);
 
-  const latestActivity = timestamps.sort(
+  const latestActivity = timestamps.filter((value): value is string => Boolean(value)).sort(
     (first, second) => new Date(second).getTime() - new Date(first).getTime(),
   )[0];
 

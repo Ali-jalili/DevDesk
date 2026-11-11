@@ -8,20 +8,10 @@ import { toast } from "react-hot-toast";
 import useUpdateRequest from "./hooks/useUpdateRequest";
 import { convertKeyValueArrayToObject } from "@/utils/convertKeyValueArrayToObject";
 import type { RequestFormData } from "@/types/database";
+import type { RequestRecord } from "@/types/database";
 
 interface RequestEditFormProps {
-  data: {
-    name: string;
-    method: string;
-    url: string;
-    headers: Record<string, string>;
-    params: Record<string, string>;
-    body: string;
-    description: string;
-    example_request: string;
-    example_response: string;
-    notes: string;
-  };
+  data: RequestRecord;
 
   onSuccess: () => void;
   onCancel: () => void;
@@ -45,25 +35,25 @@ export default function RequestEditForm({
     formState: { errors },
   } = useForm<RequestFormData>({
     defaultValues: {
-      name: data.name,
-      method: data.method,
-      url: data.url,
+      name: data.name ?? "",
+      method: data.method ?? "GET",
+      url: data.url ?? "",
 
-      headers: Object.entries(data.headers || {}).map(([key, value]) => ({
+      headers: Object.entries(data.headers ?? {}).map(([key, value]) => ({
         key,
         value,
       })),
 
-      params: Object.entries(data.params || {}).map(([key, value]) => ({
+      params: Object.entries(data.params ?? {}).map(([key, value]) => ({
         key,
         value,
       })),
 
-      body: data.body,
-      description: data.description,
-      example_request: data.example_request,
-      example_response: data.example_response,
-      notes: data.notes,
+      body: data.body ?? "",
+      description: data.description ?? "",
+      example_request: data.example_request ?? "",
+      example_response: data.example_response ?? "",
+      notes: data.notes ?? "",
     },
   });
 

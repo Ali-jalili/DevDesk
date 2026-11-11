@@ -110,10 +110,10 @@ export default function RequestList({
                     py-1
                     text-xs
                     font-bold
-                    ${methodStyle(item.method)}
+                    ${methodStyle(item.method ?? "GET")}
                   `}
                 >
-                  {item.method.toUpperCase()}
+                  {(item.method ?? "GET").toUpperCase()}
                 </span>
 
                 <FiGlobe className="h-4 w-4 text-slate-400" />

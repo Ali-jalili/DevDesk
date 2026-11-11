@@ -9,7 +9,7 @@ async function createWorkspace(
   const { data: authData } = await supabase.auth.getUser();
 
   const { data, error } = await supabase.from("workspaces").insert({
-    user_id: authData.user?.id,
+    user_id: authData.user?.id ?? null,
     name: workspaceName,
     description: workspaceDescription,
   });

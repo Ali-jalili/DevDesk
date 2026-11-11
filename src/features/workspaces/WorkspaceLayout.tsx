@@ -179,8 +179,8 @@ export default function WorkspaceLayout() {
         {isEditModalOpen && (
           <EditWorkspaceModal
             workspaceId={workspaceId}
-            name={data.name}
-            description={data.description}
+            name={data.name ?? "Untitled workspace"}
+            description={data.description ?? ""}
             onClose={() => setIsEditModalOpen(false)}
           />
         )}

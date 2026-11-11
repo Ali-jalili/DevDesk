@@ -61,7 +61,7 @@ export default function EnvironmentList({ data }: EnvironmentListProps) {
           </p>
 
           <p className="mt-4 text-xs text-slate-400">
-            Created {new Date(item.created_at).toLocaleDateString()}
+            Created {item.created_at ? new Date(item.created_at).toLocaleDateString() : "Unknown"}
           </p>
 
           <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">

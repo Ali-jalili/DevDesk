@@ -9,7 +9,7 @@
 
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
-export interface Workspaces {
+export type Workspaces = {
   id: string;
   user_id: string | null;
   name: string | null;
@@ -19,7 +19,7 @@ export interface Workspaces {
   active_environment_id: string | null;
 }
 
-export interface Collections {
+export type Collections = {
   id: string;
   workspace_id: string | null;
   name: string | null;
@@ -28,7 +28,7 @@ export interface Collections {
   updated_at: string | null;
 }
 
-export interface Requests {
+export type Requests = {
   id: string;
   name: string | null;
   method: string | null;
@@ -50,8 +50,8 @@ export type WorkspaceRecord = Workspaces;
 export type CollectionRecord = Collections;
 export type EnvironmentRecord = Environments;
 export type EnvironmentVariableRecord = EnvironmentVariables;
-export type CollectionWithRequestCount = Collections & { requests: { count: number }[] };
-export type RequestFormData = Omit<Requests, "id" | "collection_id" | "created_at" | "updated_at"> & {
+export type CollectionWithRequestCount = Collections & { requests: { count: number } };
+export type RequestFormData = {
   name: string;
   method: string;
   url: string;
@@ -64,14 +64,14 @@ export type RequestFormData = Omit<Requests, "id" | "collection_id" | "created_a
   notes: string;
 };
 
-export interface Environments {
+export type Environments = {
   id: string;
   name: string;
   workspace_id: string;
   created_at: string | null;
 }
 
-export interface EnvironmentVariables {
+export type EnvironmentVariables = {
   id: string;
   environment_id: string;
   key: string;
@@ -84,7 +84,7 @@ export interface EnvironmentVariables {
  * Row/Insert/Update per table, plus the table relationships that the
  * generated client uses for joined selects like .select("*, requests(count)").
  */
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       workspaces: {
@@ -146,7 +146,7 @@ export interface Database {
           {
             foreignKeyName: "fk_requests_collection_id";
             columns: ["id"];
-            isOneToMany: true;
+            isOneToOne: false;
             referencedRelation: "requests";
             referencedColumns: ["collection_id"];
           },
@@ -221,7 +221,7 @@ export interface Database {
           {
             foreignKeyName: "environment_variables_environment_id_fkey";
             columns: ["id"];
-            isOneToMany: true;
+            isOneToOne: false;
             referencedRelation: "environment_variables";
             referencedColumns: ["environment_id"];
           },

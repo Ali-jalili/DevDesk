@@ -33,7 +33,7 @@ function CollectionList({ collections }: CollectionListProps) {
 
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
 
-  function openEdit(collection: Collection) {
+  function openEdit(collection: CollectionWithRequestCount) {
     setOpenMenuId(null);
 
     setSelectedCollection(collection);
@@ -219,7 +219,7 @@ function CollectionList({ collections }: CollectionListProps) {
               <p className="text-xs text-slate-400">API Requests</p>
 
               <p className="mt-1 text-sm font-semibold text-slate-700">
-                {item.requests?.[0]?.count ?? 0}
+                {item.requests?.count ?? 0}
               </p>
             </div>
 
@@ -254,9 +254,9 @@ function CollectionList({ collections }: CollectionListProps) {
       {selectedCollection && (
         <EditCollectionModal
           collectionId={selectedCollection.id}
-          workspaceId={selectedCollection.workspace_id}
-          name={selectedCollection.name}
-          description={selectedCollection.description}
+          workspaceId={selectedCollection.workspace_id ?? ""}
+          name={selectedCollection.name ?? "Untitled collection"}
+          description={selectedCollection.description ?? ""}
           onClose={closeEdit}
         />
       )}
@@ -264,7 +264,7 @@ function CollectionList({ collections }: CollectionListProps) {
       {selectedCollectionToDelete && (
         <DeleteCollectionAlert
           collectionId={selectedCollectionToDelete.id}
-          workspaceId={selectedCollectionToDelete.workspace_id}
+          workspaceId={selectedCollectionToDelete.workspace_id ?? ""}
           open={isDeleteAlertOpen}
           onOpenChange={setIsDeleteAlertOpen}
         />

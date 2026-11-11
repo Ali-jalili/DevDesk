@@ -7,14 +7,7 @@ import { toast } from "react-hot-toast";
 
 import useUpdateVariable from "./hooks/useUpdateVariable";
 import VariableDeleteButton from "./VariableDeleteButton";
-
-type Variable = {
-  id: string;
-  environment_id: string;
-  key: string;
-  value: string;
-  created_at: string;
-};
+import type { EnvironmentVariableRecord } from "@/types/database";
 
 type FormData = {
   key: string;
@@ -22,7 +15,7 @@ type FormData = {
 };
 
 interface VariableListProps {
-  data: Variable[];
+  data: EnvironmentVariableRecord[];
 }
 
 export default function VariableList({ data }: VariableListProps) {
@@ -35,7 +28,7 @@ export default function VariableList({ data }: VariableListProps) {
 
   const { register, handleSubmit, reset } = useForm<FormData>();
 
-  function startEdit(item: Variable) {
+  function startEdit(item: EnvironmentVariableRecord) {
     setEditingId(item.id);
 
     reset({
