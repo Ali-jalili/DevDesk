@@ -17,7 +17,9 @@ async function createCollection({
     workspace_id: workspaceId,
   });
 
-  return { data, error };
+  if (error) throw new Error(error.message);
+
+  return data;
 }
 
 async function getCollections(workspaceId: string) {

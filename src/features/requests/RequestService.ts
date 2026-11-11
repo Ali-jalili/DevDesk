@@ -41,7 +41,9 @@ async function createRequest({
     collection_id: collectionId,
   });
 
-  return { data, error };
+  if (error) throw new Error(error.message);
+
+  return data;
 }
 
 async function getRequests(collectionId: string) {

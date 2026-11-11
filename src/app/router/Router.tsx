@@ -19,7 +19,7 @@ const WorkspaceOverview = lazy(
   () => import("@/features/workspaces/WorkspaceOverview"),
 );
 const CreateWorkspace = lazy(
-  () => import("@/features/workspaces/CreateWorkspace "),
+  () => import("@/features/workspaces/CreateWorkspace"),
 );
 const Collections = lazy(() => import("@/features/collection/Collections"));
 const CollectionDetail = lazy(

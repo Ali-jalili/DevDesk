@@ -7,7 +7,7 @@ export async function getWorkspaceSnapshot(
   workspaceId?: string,
 ) {
   let workspaceQuery = supabase
-    .from("CreateWorkspace")
+    .from("workspaces")
     .select("id, name, created_at")
     .eq("user_id", userId);
 
