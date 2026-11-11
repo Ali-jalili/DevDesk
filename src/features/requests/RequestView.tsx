@@ -2,25 +2,12 @@
 
 import RequestDeleteButton from "./RequestDeleteButton";
 import { FiEdit3, FiCode } from "react-icons/fi";
-
-type Request = {
-  id: string;
-  name: string;
-  method: string;
-  url: string;
-  headers: Record<string, string>;
-  params: Record<string, string>;
-  body: string;
-  description: string;
-  example_request: string;
-  example_response: string;
-  notes: string;
-  collection_id: string;
-  created_at: string;
-};
+import SendRequest from "./SendRequest";
+import type { RequestRecord } from "@/types/database";
 
 interface RequestViewProps {
-  data: Request;
+  data: RequestRecord;
+  activeEnvironmentId: string | null;
   onEdit: () => void;
   onDeleteSuccess: () => void;
 }
@@ -42,6 +29,7 @@ function methodStyle(method: string) {
 
 export default function RequestView({
   data,
+  activeEnvironmentId,
   onEdit,
   onDeleteSuccess,
 }: RequestViewProps) {
@@ -77,6 +65,8 @@ export default function RequestView({
           </button>
         </div>
       </section>
+
+      <SendRequest request={data} activeEnvironmentId={activeEnvironmentId} />
 
       {/* Headers */}
       {Object.keys(data.headers || {}).length > 0 && (

@@ -4,16 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { FiArrowRight, FiGlobe } from "react-icons/fi";
 
 import EnvironmentDeleteButton from "./EnvironmentDeleteButton";
-
-type Environment = {
-  id: string;
-  name: string;
-  workspace_id: string;
-  created_at: string;
-};
+import type { EnvironmentRecord } from "@/types/database";
 
 interface EnvironmentListProps {
-  data: Environment[];
+  data: EnvironmentRecord[];
 }
 
 export default function EnvironmentList({ data }: EnvironmentListProps) {

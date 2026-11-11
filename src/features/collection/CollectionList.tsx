@@ -14,20 +14,10 @@ import { useNavigate } from "react-router-dom";
 
 import EditCollectionModal from "./EditCollectionModal";
 import DeleteCollectionAlert from "./DeleteCollectionAlert";
-
-type Collection = {
-  id: string;
-  name: string;
-  description: string;
-  workspace_id: string;
-
-  requests: {
-    count: number;
-  }[];
-};
+import type { CollectionWithRequestCount } from "@/types/database";
 
 interface CollectionListProps {
-  collections: Collection[];
+  collections: CollectionWithRequestCount[];
 }
 
 function CollectionList({ collections }: CollectionListProps) {
@@ -36,10 +26,10 @@ function CollectionList({ collections }: CollectionListProps) {
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
   const [selectedCollection, setSelectedCollection] =
-    useState<Collection | null>(null);
+    useState<CollectionWithRequestCount | null>(null);
 
   const [selectedCollectionToDelete, setSelectedCollectionToDelete] =
-    useState<Collection | null>(null);
+    useState<CollectionWithRequestCount | null>(null);
 
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
 

@@ -5,31 +5,10 @@ import Loading from "@/ui/Loading";
 import { useNavigate } from "react-router-dom";
 
 import { FiArrowRight, FiGlobe } from "react-icons/fi";
-
-type Request = {
-  id: string;
-
-  name: string;
-
-  method: string;
-
-  url: string;
-
-  headers: Record<string, string>;
-
-  params: Record<string, string>;
-
-  body: string;
-
-  description: string;
-
-  collection_id: string;
-
-  created_at: string;
-};
+import type { RequestRecord } from "@/types/database";
 
 interface RequestListProps {
-  data: Request[];
+  data: RequestRecord[];
 
   workspaceId: string;
 

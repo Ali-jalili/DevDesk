@@ -7,28 +7,7 @@ import { toast } from "react-hot-toast";
 
 import useUpdateRequest from "./hooks/useUpdateRequest";
 import { convertKeyValueArrayToObject } from "@/utils/convertKeyValueArrayToObject";
-
-type FormData = {
-  name: string;
-  method: string;
-  url: string;
-
-  headers: {
-    key: string;
-    value: string;
-  }[];
-
-  params: {
-    key: string;
-    value: string;
-  }[];
-
-  body: string;
-  description: string;
-  example_request: string;
-  example_response: string;
-  notes: string;
-};
+import type { RequestFormData } from "@/types/database";
 
 interface RequestEditFormProps {
   data: {
@@ -64,7 +43,7 @@ export default function RequestEditForm({
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<RequestFormData>({
     defaultValues: {
       name: data.name,
       method: data.method,
@@ -106,7 +85,7 @@ export default function RequestEditForm({
     name: "params",
   });
 
-  function submitForm(formData: FormData) {
+  function submitForm(formData: RequestFormData) {
     if (!requestId) return;
 
     mutate(

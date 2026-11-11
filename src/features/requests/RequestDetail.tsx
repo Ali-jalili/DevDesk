@@ -11,6 +11,7 @@ import Loading from "@/ui/Loading";
 import RequestView from "./RequestView";
 
 import RequestEditForm from "./RequestEditForm";
+import useWorkspaceDetails from "@/features/workspaces/hooks/useWorkspaceDetails";
 
 export default function RequestDetail() {
   const [isEditing, setIsEditing] = useState(false);
@@ -24,6 +25,7 @@ export default function RequestDetail() {
   }>();
 
   const { data, isLoading, error } = useGetRequest(requestId);
+  const { data: workspace } = useWorkspaceDetails(workspaceId);
 
   if (isLoading) {
     return <Loading />;
@@ -58,6 +60,7 @@ export default function RequestDetail() {
   ) : (
     <RequestView
       data={data}
+      activeEnvironmentId={workspace?.active_environment_id ?? null}
       onEdit={() => setIsEditing(true)}
       onDeleteSuccess={handleDeleteSuccess}
     />

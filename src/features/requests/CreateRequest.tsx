@@ -5,6 +5,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
+import type { RequestFormData } from "@/types/database";
 
 export default function CreateRequest() {
   const { workspaceId, collectionId } = useParams<{
@@ -13,26 +14,7 @@ export default function CreateRequest() {
   }>();
   const navigate = useNavigate();
 
-  type FormData = {
-    name: string;
-    method: string;
-    url: string;
-    headers: {
-      key: string;
-      value: string;
-    }[];
-    params: {
-      key: string;
-      value: string;
-    }[];
-    body: string;
-    description: string;
-    example_request: string;
-    example_response: string;
-    notes: string;
-  };
-
-  const { register, control, handleSubmit, reset } = useForm<FormData>({
+  const { register, control, handleSubmit, reset } = useForm<RequestFormData>({
     defaultValues: {
       method: "GET",
       headers: [{ key: "", value: "" }],
@@ -74,7 +56,7 @@ export default function CreateRequest() {
 
   const { mutate, isPending } = useCreateRequest();
 
-  function submitFormRequest(data: FormData) {
+  function submitFormRequest(data: RequestFormData) {
     const requestData = {
       name: data.name,
       method: data.method,
