@@ -1,6 +1,7 @@
 /** @format */
 
 import useAuth from "@/app/context/useAuth";
+import AuthShell from "@/components/AuthShell";
 
 import { getAuthErrorMessage } from "@/utils/authError";
 
@@ -94,30 +95,29 @@ export default function Login() {
   }
 
   return (
-    <main className="flex min-h-[calc(100vh-64px)] items-center justify-center bg-slate-50 px-6 py-16">
-      <div className="w-full max-w-md">
-        <div className="mb-8 text-center">
-          <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-600 text-sm font-bold text-white shadow-sm shadow-indigo-600/20">
-            D
-          </div>
-
-          <h1 className="mt-5 text-3xl font-bold tracking-tight text-slate-950">
-            Welcome back
-          </h1>
-
-          <p className="mt-2 text-sm leading-6 text-slate-500">
-            Log in to continue working with your API workflow.
-          </p>
-        </div>
-
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+    <AuthShell
+      mode="login"
+      title="Welcome back"
+      description="Log in to open your workspaces, collections, and requests."
+      footer={
+        <p className="text-center text-sm text-slate-500 dark:text-slate-400">
+          Don&apos;t have an account?{" "}
+          <NavLink
+            to="/signup"
+            className="font-semibold text-indigo-600 transition hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300"
+          >
+            Create an account
+          </NavLink>
+        </p>
+      }
+    >
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Email */}
 
             <div>
               <label
                 htmlFor="email"
-                className="mb-2 block text-sm font-medium text-slate-700"
+                className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200"
               >
                 Email
               </label>
@@ -141,15 +141,17 @@ export default function Login() {
                 name="email"
                 placeholder="you@example.com"
                 autoComplete="email"
-                className={`w-full rounded-lg border bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 ${
+                aria-invalid={errors.email ? true : undefined}
+                aria-describedby={errors.email ? "login-email-error" : undefined}
+                className={`w-full rounded-xl border bg-white px-3.5 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:ring-4 focus:ring-indigo-500/10 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500 ${
                   errors.email
                     ? "border-red-500 focus:border-red-500"
-                    : "border-slate-200 focus:border-indigo-500"
+                    : "border-slate-200 focus:border-indigo-500 dark:border-white/10"
                 }`}
               />
 
               {errors.email && (
-                <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+                <p id="login-email-error" role="alert" className="mt-1 text-sm text-red-500">{errors.email}</p>
               )}
             </div>
 
@@ -159,7 +161,7 @@ export default function Login() {
               <div className="mb-2 flex items-center justify-between">
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium text-slate-700"
+                  className="block text-sm font-medium text-slate-700 dark:text-slate-200"
                 >
                   Password
                 </label>
@@ -167,7 +169,7 @@ export default function Login() {
                 <button
                   type="button"
                   onClick={() => void sendResetEmail()}
-                  className="text-xs font-medium text-indigo-600 transition hover:text-indigo-700"
+                  className="text-xs font-medium text-indigo-600 transition hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300"
                 >
                   Forgot password?
                 </button>
@@ -190,17 +192,19 @@ export default function Login() {
                 type="password"
                 id="password"
                 name="password"
-                placeholder="••••••••"
+                placeholder="Enter your password"
                 autoComplete="current-password"
-                className={`w-full rounded-lg border bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 ${
+                aria-invalid={errors.password ? true : undefined}
+                aria-describedby={errors.password ? "login-password-error" : undefined}
+                className={`w-full rounded-xl border bg-white px-3.5 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:ring-4 focus:ring-indigo-500/10 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500 ${
                   errors.password
                     ? "border-red-500 focus:border-red-500"
-                    : "border-slate-200 focus:border-indigo-500"
+                    : "border-slate-200 focus:border-indigo-500 dark:border-white/10"
                 }`}
               />
 
               {errors.password && (
-                <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+                <p id="login-password-error" role="alert" className="mt-1 text-sm text-red-500">{errors.password}</p>
               )}
             </div>
 
@@ -209,7 +213,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-indigo-600/20 transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="group flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 transition hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-600/25 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
             >
               {loading ? (
                 <>
@@ -221,24 +225,6 @@ export default function Login() {
               )}
             </button>
           </form>
-
-          <div className="mt-6 border-t border-slate-100 pt-6 text-center">
-            <p className="text-sm text-slate-500">
-              Don't have an account?{" "}
-              <NavLink
-                to="/signup"
-                className="font-semibold text-indigo-600 transition hover:text-indigo-700"
-              >
-                Create an account
-              </NavLink>
-            </p>
-          </div>
-        </div>
-
-        <p className="mt-6 text-center text-xs leading-5 text-slate-400">
-          Your API workflow, organized in one focused workspace.
-        </p>
-      </div>
-    </main>
+    </AuthShell>
   );
 }

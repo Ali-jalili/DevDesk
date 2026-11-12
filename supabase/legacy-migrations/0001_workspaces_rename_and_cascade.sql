@@ -110,6 +110,7 @@ $$;
 --    New policy:  the caller must own the target collection
 -- ---------------------------------------------------------------------------
 drop policy if exists "Users can create requests" on public.requests;
+drop policy if exists "Users can create requests in their own collections" on public.requests;
 
 create policy "Users can create requests in their own collections"
   on public.requests for insert
