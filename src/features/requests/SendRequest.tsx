@@ -1,7 +1,15 @@
+/** @format */
+
 import { useState } from "react";
 import { LoaderCircle, Send } from "lucide-react";
 import useGetVariables from "@/features/environments/hooks/useGetVariables";
 import type { RequestRecord } from "@/types/database";
+import {
+  interpolate,
+  findUnresolvedVariables,
+  formatResponse,
+  formatBytes,
+} from "@/utils/requestVariables";
 
 type RequestResponse = {
   status: number;
@@ -13,37 +21,6 @@ type RequestResponse = {
 };
 
 const MAX_RESPONSE_BYTES = 1024 * 1024;
-
-function interpolate(value: string, variables: Record<string, string>) {
-  return value.replace(/\{\{\s*([^{}]+?)\s*\}\}/g, (match, key: string) =>
-    Object.hasOwn(variables, key) ? variables[key] : match,
-  );
-}
-
-function findUnresolvedVariables(values: string[]) {
-  const names = new Set<string>();
-  const pattern = /\{\{\s*([^{}]+?)\s*\}\}/g;
-
-  for (const value of values) {
-    for (const match of value.matchAll(pattern)) names.add(match[1].trim());
-  }
-
-  return [...names];
-}
-
-function formatResponse(body: string) {
-  try {
-    return JSON.stringify(JSON.parse(body), null, 2);
-  } catch {
-    return body || "(empty response)";
-  }
-}
-
-function formatBytes(bytes: number) {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
-}
 
 async function readResponseBody(response: Response) {
   if (!response.body) return { body: "", sizeBytes: 0, truncated: false };
@@ -104,23 +81,33 @@ export default function SendRequest({
     setResponse(null);
 
     if (variablesError) {
-      setError("Environment variables could not be loaded. Try again before sending.");
+      setError(
+        "Environment variables could not be loaded. Try again before sending.",
+      );
       return;
     }
 
-    const values = Object.fromEntries(variables.map(({ key, value }) => [key, value]));
+    const values = Object.fromEntries(
+      variables.map(({ key, value }) => [key, value]),
+    );
     const rawValues = [
       request.url ?? "",
-      ...Object.entries(request.params ?? {}).flatMap(([key, value]) => [key, value]),
-      ...Object.entries(request.headers ?? {}).flatMap(([key, value]) => [key, value]),
+      ...Object.entries(request.params ?? {}).flatMap(([key, value]) => [
+        key,
+        value,
+      ]),
+      ...Object.entries(request.headers ?? {}).flatMap(([key, value]) => [
+        key,
+        value,
+      ]),
       request.body ?? "",
     ];
-    const unresolved = findUnresolvedVariables(rawValues).filter(
-      (key) => !Object.hasOwn(values, key),
-    );
+    const unresolved = findUnresolvedVariables(rawValues, values);
 
     if (unresolved.length > 0) {
-      setError(`Missing environment variable${unresolved.length > 1 ? "s" : ""}: ${unresolved.join(", ")}`);
+      setError(
+        `Missing environment variable${unresolved.length > 1 ? "s" : ""}: ${unresolved.join(", ")}`,
+      );
       return;
     }
 
@@ -132,7 +119,10 @@ export default function SendRequest({
       }
 
       for (const [key, value] of Object.entries(request.params ?? {})) {
-        target.searchParams.set(interpolate(key, values), interpolate(value, values));
+        target.searchParams.set(
+          interpolate(key, values),
+          interpolate(value, values),
+        );
       }
 
       const headers = Object.fromEntries(
@@ -147,7 +137,8 @@ export default function SendRequest({
       const result = await fetch(target.toString(), {
         method,
         headers,
-        body: method === "GET" || method === "HEAD" ? undefined : body || undefined,
+        body:
+          method === "GET" || method === "HEAD" ? undefined : body || undefined,
       });
       const responseBody = await readResponseBody(result);
 
@@ -203,11 +194,15 @@ export default function SendRequest({
 
       {!activeEnvironmentId && (
         <p className="mt-3 text-xs text-amber-700">
-          No active environment selected. Requests without environment variables can still be sent.
+          No active environment selected. Requests without environment variables
+          can still be sent.
         </p>
       )}
       {variablesError && (
-        <div role="alert" className="mt-3 flex flex-wrap items-center gap-2 text-sm text-red-700">
+        <div
+          role="alert"
+          className="mt-3 flex flex-wrap items-center gap-2 text-sm text-red-700"
+        >
           <span>Environment variables could not be loaded.</span>
           <button
             type="button"
@@ -241,7 +236,9 @@ export default function SendRequest({
               {response.status}
             </span>
             <span className="text-slate-500">{response.durationMs} ms</span>
-            <span className="text-slate-500">{formatBytes(response.sizeBytes)}</span>
+            <span className="text-slate-500">
+              {formatBytes(response.sizeBytes)}
+            </span>
           </div>
 
           {Object.keys(response.headers).length > 0 && (
@@ -251,7 +248,10 @@ export default function SendRequest({
               </summary>
               <dl className="space-y-2 border-t border-slate-200 px-4 py-3 text-xs">
                 {Object.entries(response.headers).map(([key, value]) => (
-                  <div key={key} className="grid gap-1 sm:grid-cols-[180px_1fr]">
+                  <div
+                    key={key}
+                    className="grid gap-1 sm:grid-cols-[180px_1fr]"
+                  >
                     <dt className="font-semibold text-slate-700">{key}</dt>
                     <dd className="break-all text-slate-500">{value}</dd>
                   </div>
