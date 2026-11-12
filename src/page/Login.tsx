@@ -13,7 +13,7 @@ import { FaSpinner } from "react-icons/fa6";
 import { NavLink, useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const { handleSignIn } = useAuth();
+  const { handleSignIn, handlePasswordReset } = useAuth();
 
   const [email, setEmail] = useState("");
 
@@ -27,6 +27,20 @@ export default function Login() {
   }>({});
 
   const navigate = useNavigate();
+
+  async function sendResetEmail() {
+    if (!email.trim() || !email.includes("@")) {
+      setErrors({ email: "Enter your email above, then tap Forgot password." });
+      return;
+    }
+
+    try {
+      await handlePasswordReset(email);
+      toast.success("Reset link sent. Check your inbox.");
+    } catch (error) {
+      toast.error(getAuthErrorMessage(error));
+    }
+  }
 
   function validateForm() {
     const newErrors: {
@@ -152,6 +166,7 @@ export default function Login() {
 
                 <button
                   type="button"
+                  onClick={() => void sendResetEmail()}
                   className="text-xs font-medium text-indigo-600 transition hover:text-indigo-700"
                 >
                   Forgot password?

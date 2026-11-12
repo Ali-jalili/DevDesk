@@ -105,11 +105,15 @@ export default function Signup() {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Name */}
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-700">
+              <label
+                htmlFor="signup-name"
+                className="mb-2 block text-sm font-medium text-slate-700"
+              >
                 Name
               </label>
 
               <input
+                id="signup-name"
                 value={name}
                 onChange={(e) => {
                   const value = e.target.value;
@@ -126,6 +130,8 @@ export default function Signup() {
                 type="text"
                 placeholder="John Doe"
                 autoComplete="name"
+                aria-invalid={errors.name ? true : undefined}
+                aria-describedby={errors.name ? "signup-name-error" : undefined}
                 className={`w-full rounded-lg border px-3.5 py-2.5 text-sm outline-none transition ${
                   errors.name
                     ? "border-red-500 focus:border-red-500"
@@ -134,17 +140,27 @@ export default function Signup() {
               />
 
               {errors.name && (
-                <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+                <p
+                  id="signup-name-error"
+                  role="alert"
+                  className="mt-1 text-sm text-red-500"
+                >
+                  {errors.name}
+                </p>
               )}
             </div>
 
             {/* Email */}
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-700">
+              <label
+                htmlFor="signup-email"
+                className="mb-2 block text-sm font-medium text-slate-700"
+              >
                 Email
               </label>
 
               <input
+                id="signup-email"
                 value={email}
                 onChange={(e) => {
                   const value = e.target.value;
@@ -161,6 +177,10 @@ export default function Signup() {
                 type="email"
                 placeholder="you@example.com"
                 autoComplete="email"
+                aria-invalid={errors.email ? true : undefined}
+                aria-describedby={
+                  errors.email ? "signup-email-error" : undefined
+                }
                 className={`w-full rounded-lg border px-3.5 py-2.5 text-sm outline-none transition ${
                   errors.email
                     ? "border-red-500 focus:border-red-500"
@@ -169,14 +189,23 @@ export default function Signup() {
               />
 
               {errors.email && (
-                <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+                <p
+                  id="signup-email-error"
+                  role="alert"
+                  className="mt-1 text-sm text-red-500"
+                >
+                  {errors.email}
+                </p>
               )}
             </div>
 
             {/* Password */}
             <div>
               <div className="mb-2 flex items-center justify-between">
-                <label className="block text-sm font-medium text-slate-700">
+                <label
+                  htmlFor="signup-password"
+                  className="block text-sm font-medium text-slate-700"
+                >
                   Password
                 </label>
 
@@ -186,6 +215,7 @@ export default function Signup() {
               </div>
 
               <input
+                id="signup-password"
                 value={password}
                 onChange={(e) => {
                   const value = e.target.value;
@@ -202,6 +232,10 @@ export default function Signup() {
                 type="password"
                 placeholder="••••••••"
                 autoComplete="new-password"
+                aria-invalid={errors.password ? true : undefined}
+                aria-describedby={
+                  errors.password ? "signup-password-error" : undefined
+                }
                 className={`w-full rounded-lg border px-3.5 py-2.5 text-sm outline-none transition ${
                   errors.password
                     ? "border-red-500 focus:border-red-500"
@@ -210,7 +244,13 @@ export default function Signup() {
               />
 
               {errors.password && (
-                <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+                <p
+                  id="signup-password-error"
+                  role="alert"
+                  className="mt-1 text-sm text-red-500"
+                >
+                  {errors.password}
+                </p>
               )}
             </div>
 
