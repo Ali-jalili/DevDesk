@@ -2,10 +2,12 @@
 
 import { useForm, useFieldArray } from "react-hook-form";
 import type { UseFormRegister, FieldPath } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { FiPlus, FiTrash2 } from "react-icons/fi";
 
 import { convertKeyValueArrayToObject } from "@/utils/convertKeyValueArrayToObject";
 import type { RequestRecord, RequestFormData } from "@/types/database";
+import { requestSchema } from "./schemas";
 
 type KeyValueItem = { key: string; value: string };
 
@@ -51,6 +53,7 @@ export default function RequestForm({
     handleSubmit,
     formState: { errors },
   } = useForm<RequestFormData>({
+    resolver: zodResolver(requestSchema),
     defaultValues: {
       name: initialValues?.name ?? "",
       method: initialValues?.method ?? "GET",
@@ -214,6 +217,11 @@ export default function RequestForm({
 }`}
           className="w-full resize-none rounded-lg border border-border bg-slate-950 px-4 py-4 font-mono text-sm text-slate-100 outline-none transition focus:ring-2 focus:ring-primary/20"
         />
+        {errors.body && (
+          <p role="alert" className="mt-2 text-sm text-red-500">
+            {errors.body.message}
+          </p>
+        )}
       </section>
 
       {/* Documentation */}

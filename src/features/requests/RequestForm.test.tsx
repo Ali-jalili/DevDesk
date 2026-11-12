@@ -42,7 +42,7 @@ describe("RequestForm (create)", () => {
     await user.click(screen.getByRole("button", { name: "Create Request" }));
 
     expect(onSubmit).not.toHaveBeenCalled();
-    expect(screen.getByText("Request name is required")).toBeInTheDocument();
+    expect(screen.getByText(/Request name is required/)).toBeInTheDocument();
   });
 
   it("prefills fields in edit mode", async () => {

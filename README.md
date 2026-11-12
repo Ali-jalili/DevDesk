@@ -1,5 +1,7 @@
 # DevDesk
 
+[![CI](https://github.com/Ali-jalili/Devdesk/actions/workflows/ci.yml/badge.svg)](https://github.com/Ali-jalili/Devdesk/actions/workflows/ci.yml)
+
 DevDesk is a small API workspace for organizing HTTP requests, collections, and environment variables. Requests can use `{{variable}}` placeholders and be sent from the browser, with the response status and body shown in the app.
 
 ![DevDesk application](./screenshots/devdesk-home.png)
@@ -58,6 +60,17 @@ pnpm build
 ```
 
 GitHub Actions runs these four checks for pushes and pull requests.
+
+## Performance
+
+Routes are split with `React.lazy` and each feature chunk is built and cached
+separately. Data is cached with TanStack Query (`staleTime` of one minute,
+refetch on window focus).
+
+Measure performance with [Lighthouse](https://developer.chrome.com/docs/lighthouse/):
+run the audit against a deployed build and record the score. Scores are
+environment-dependent (network, browser, device), so report the number you
+actually measured rather than an assumed one.
 
 ## License
 
