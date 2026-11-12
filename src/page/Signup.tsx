@@ -1,6 +1,7 @@
 /** @format */
 
 import useAuth from "@/app/context/useAuth";
+import AuthShell from "@/components/AuthShell";
 import { getAuthErrorMessage } from "@/utils/authError";
 
 import React, { useState } from "react";
@@ -85,29 +86,28 @@ export default function Signup() {
   }
 
   return (
-    <main className="flex min-h-[calc(100vh-64px)] items-center justify-center bg-slate-50 px-6 py-16">
-      <div className="w-full max-w-md">
-        <div className="mb-8 text-center">
-          <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-600 text-sm font-bold text-white shadow-sm shadow-indigo-600/20">
-            D
-          </div>
-
-          <h1 className="mt-5 text-3xl font-bold tracking-tight text-slate-950">
-            Create your account
-          </h1>
-
-          <p className="mt-2 text-sm leading-6 text-slate-500">
-            Start organizing your API workflow with DevDesk.
-          </p>
-        </div>
-
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+    <AuthShell
+      mode="signup"
+      title="Create your account"
+      description="Set up your account, then create a workspace from your dashboard."
+      footer={
+        <p className="text-center text-sm text-slate-500 dark:text-slate-400">
+          Already have an account?{" "}
+          <NavLink
+            to="/login"
+            className="font-semibold text-indigo-600 transition hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300"
+          >
+            Log in
+          </NavLink>
+        </p>
+      }
+    >
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Name */}
             <div>
               <label
                 htmlFor="signup-name"
-                className="mb-2 block text-sm font-medium text-slate-700"
+                className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200"
               >
                 Name
               </label>
@@ -132,10 +132,10 @@ export default function Signup() {
                 autoComplete="name"
                 aria-invalid={errors.name ? true : undefined}
                 aria-describedby={errors.name ? "signup-name-error" : undefined}
-                className={`w-full rounded-lg border px-3.5 py-2.5 text-sm outline-none transition ${
+                className={`w-full rounded-xl border bg-white px-3.5 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:ring-4 focus:ring-indigo-500/10 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500 ${
                   errors.name
                     ? "border-red-500 focus:border-red-500"
-                    : "border-slate-200 focus:border-indigo-500"
+                    : "border-slate-200 focus:border-indigo-500 dark:border-white/10"
                 }`}
               />
 
@@ -154,7 +154,7 @@ export default function Signup() {
             <div>
               <label
                 htmlFor="signup-email"
-                className="mb-2 block text-sm font-medium text-slate-700"
+                className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200"
               >
                 Email
               </label>
@@ -181,10 +181,10 @@ export default function Signup() {
                 aria-describedby={
                   errors.email ? "signup-email-error" : undefined
                 }
-                className={`w-full rounded-lg border px-3.5 py-2.5 text-sm outline-none transition ${
+                className={`w-full rounded-xl border bg-white px-3.5 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:ring-4 focus:ring-indigo-500/10 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500 ${
                   errors.email
                     ? "border-red-500 focus:border-red-500"
-                    : "border-slate-200 focus:border-indigo-500"
+                    : "border-slate-200 focus:border-indigo-500 dark:border-white/10"
                 }`}
               />
 
@@ -204,12 +204,12 @@ export default function Signup() {
               <div className="mb-2 flex items-center justify-between">
                 <label
                   htmlFor="signup-password"
-                  className="block text-sm font-medium text-slate-700"
+                  className="block text-sm font-medium text-slate-700 dark:text-slate-200"
                 >
                   Password
                 </label>
 
-                <span className="text-xs text-slate-400">
+                <span className="text-xs text-slate-400 dark:text-slate-500">
                   At least 8 characters
                 </span>
               </div>
@@ -230,16 +230,16 @@ export default function Signup() {
                   }
                 }}
                 type="password"
-                placeholder="••••••••"
+                placeholder="Create a password"
                 autoComplete="new-password"
                 aria-invalid={errors.password ? true : undefined}
                 aria-describedby={
                   errors.password ? "signup-password-error" : undefined
                 }
-                className={`w-full rounded-lg border px-3.5 py-2.5 text-sm outline-none transition ${
+                className={`w-full rounded-xl border bg-white px-3.5 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:ring-4 focus:ring-indigo-500/10 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500 ${
                   errors.password
                     ? "border-red-500 focus:border-red-500"
-                    : "border-slate-200 focus:border-indigo-500"
+                    : "border-slate-200 focus:border-indigo-500 dark:border-white/10"
                 }`}
               />
 
@@ -257,7 +257,7 @@ export default function Signup() {
             <button
               type="submit"
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 transition hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-600/25 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
             >
               {loading ? (
                 <>
@@ -269,25 +269,6 @@ export default function Signup() {
               )}
             </button>
           </form>
-
-          <div className="mt-6 border-t border-slate-100 pt-6 text-center">
-            <p className="text-sm text-slate-500">
-              Already have an account?{" "}
-              <NavLink
-                to="/login"
-                className="font-semibold text-indigo-600 hover:text-indigo-700"
-              >
-                Log in
-              </NavLink>
-            </p>
-          </div>
-        </div>
-
-        <p className="mt-6 text-center text-xs leading-5 text-slate-400">
-          By creating an account, you can start organizing your API workflow in
-          DevDesk.
-        </p>
-      </div>
-    </main>
+    </AuthShell>
   );
 }

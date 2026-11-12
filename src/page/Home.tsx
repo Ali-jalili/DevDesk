@@ -218,7 +218,7 @@ export default function Home() {
             <div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white/80 shadow-2xl shadow-slate-900/10 backdrop-blur motion-safe:[animation:float-slow_7s_ease-in-out_infinite] dark:border-white/10 dark:bg-slate-900/60">
               {/* Window Header */}
 
-              <div className="flex h-11 items-center justify-between border-b border-slate-200/80 bg-slate-50/50 px-4 dark:border-white/5 dark:bg-white/5">
+              <div className="flex h-11 items-center justify-between border-b border-slate-200/80 bg-slate-50/50 px-3 sm:px-4 dark:border-white/5 dark:bg-white/5">
                 <div className="flex gap-1.5">
                   <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
                   <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
@@ -232,10 +232,10 @@ export default function Home() {
                 <div className="w-8" />
               </div>
 
-              <div className="grid min-h-[320px] grid-cols-[92px_1fr] sm:min-h-[400px] sm:grid-cols-[145px_1fr]">
+              <div className="grid min-h-[280px] grid-cols-1 sm:min-h-[400px] sm:grid-cols-[145px_minmax(0,1fr)]">
                 {/* Sidebar */}
 
-                <aside className="border-r border-slate-200/80 bg-slate-50/60 p-3 dark:border-white/5 dark:bg-white/5">
+                <aside className="hidden border-r border-slate-200/80 bg-slate-50/60 p-3 dark:border-white/5 dark:bg-white/5 sm:block">
                   <div className="mb-7 flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-violet-500 text-xs font-bold text-white shadow-md shadow-indigo-500/25">
                     D
                   </div>
@@ -272,8 +272,8 @@ export default function Home() {
 
                 {/* Preview Content */}
 
-                <div className="min-w-0 p-5">
-                  <div className="flex items-center justify-between">
+                <div className="min-w-0 p-3 sm:p-5">
+                  <div className="flex flex-col gap-2 min-[420px]:flex-row min-[420px]:items-center min-[420px]:justify-between">
                     <div>
                       <p className="text-[10px] text-slate-400">
                         SAMPLE WORKSPACE · COLLECTIONS
@@ -284,14 +284,14 @@ export default function Home() {
                       </h3>
                     </div>
 
-                    <div className="rounded-md border border-slate-200 px-2.5 py-1.5 text-[9px] font-medium text-slate-500 dark:border-white/10 dark:text-slate-400">
+                    <div className="w-fit rounded-md border border-slate-200 px-2.5 py-1.5 text-[9px] font-medium text-slate-500 dark:border-white/10 dark:text-slate-400">
                       Active environment: Development
                     </div>
                   </div>
 
                   {/* Collection detail and the request creation entry point */}
 
-                  <div className="mt-5 flex items-center justify-between">
+                  <div className="mt-5 flex flex-wrap items-center justify-between gap-2">
                     <p className="text-[9px] font-semibold tracking-wide text-slate-400">
                       REQUESTS IN CATALOG
                     </p>
@@ -303,7 +303,7 @@ export default function Home() {
                   {/* Animated Request */}
 
                   <div className="mt-3 overflow-hidden rounded-lg border border-slate-200/80 bg-slate-50/70 dark:border-white/5 dark:bg-white/5">
-                    <div className="flex items-center gap-2 border-b border-slate-200/80 bg-white/70 px-4 py-3 dark:border-white/5 dark:bg-white/5">
+                    <div className="flex flex-wrap items-center gap-2 border-b border-slate-200/80 bg-white/70 px-3 py-3 sm:px-4 dark:border-white/5 dark:bg-white/5">
                       <span
                         className={`rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[9px] font-bold dark:bg-white/10 ${request.methodColor}`}
                       >
@@ -311,7 +311,7 @@ export default function Home() {
                       </span>
 
                       <span
-                        className="truncate font-mono text-[10px] text-slate-600 dark:text-slate-300"
+                        className="min-w-0 flex-1 truncate font-mono text-[10px] text-slate-600 dark:text-slate-300"
                       >
                         {request.endpoint}
                       </span>
@@ -323,8 +323,8 @@ export default function Home() {
                       </span>
                     </div>
 
-                    <div className="space-y-2 p-4 font-mono text-[9px]">
-                      <div className="flex gap-3">
+                    <div className="space-y-2 p-3 font-mono text-[9px] sm:p-4">
+                      <div className="flex min-w-0 gap-3">
                         <span className="text-slate-300">01</span>
 
                         <span className="truncate text-slate-500">
@@ -332,15 +332,15 @@ export default function Home() {
                         </span>
                       </div>
 
-                      <div className="flex gap-3">
+                      <div className="flex min-w-0 gap-3">
                         <span className="text-slate-300">02</span>
 
-                        <span className="text-slate-500">
+                        <span className="min-w-0 flex-1 truncate text-slate-500">
                           Authorization: Bearer {`{{API_TOKEN}}`}
                         </span>
                       </div>
 
-                      <div className="flex gap-3">
+                      <div className="flex min-w-0 gap-3">
                         <span className="text-slate-300">03</span>
 
                         <span className="truncate text-indigo-500">
@@ -349,7 +349,7 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div className="border-t border-slate-200/80 px-4 py-2.5 text-[9px] text-slate-400 dark:border-white/5">
+                    <div className="border-t border-slate-200/80 px-3 py-2.5 text-[9px] leading-4 text-slate-400 dark:border-white/5 sm:px-4">
                       Sample only · no request is sent from this preview
                     </div>
                   </div>
