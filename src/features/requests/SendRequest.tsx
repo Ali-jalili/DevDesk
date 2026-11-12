@@ -46,9 +46,7 @@ function formatBytes(bytes: number) {
 }
 
 async function readResponseBody(response: Response) {
-  if (!response.body) {
-    return { body: "", sizeBytes: 0, truncated: false };
-  }
+  if (!response.body) return { body: "", sizeBytes: 0, truncated: false };
 
   const reader = response.body.getReader();
   const chunks: Uint8Array[] = [];
@@ -81,11 +79,7 @@ async function readResponseBody(response: Response) {
     offset += chunk.byteLength;
   }
 
-  return {
-    body: new TextDecoder().decode(bytes),
-    sizeBytes,
-    truncated,
-  };
+  return { body: new TextDecoder().decode(bytes), sizeBytes, truncated };
 }
 
 export default function SendRequest({
@@ -166,7 +160,7 @@ export default function SendRequest({
     } catch (caught) {
       setError(
         caught instanceof TypeError
-          ? "The browser could not reach this API. Check the URL and your network; the API may also block browser requests through CORS."
+          ? "The browser could not reach this API. Check the URL and your network; the API may not allow browser requests through CORS."
           : caught instanceof Error
             ? caught.message
             : "Request failed.",

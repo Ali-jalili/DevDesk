@@ -1,6 +1,6 @@
 # DevDesk
 
-DevDesk is a small API workspace for organizing HTTP requests, collections, and environment variables. Requests can use `{{variable}}` placeholders and be sent through a Supabase Edge Function proxy, with the response status and body shown in the app.
+DevDesk is a small API workspace for organizing HTTP requests, collections, and environment variables. Requests can use `{{variable}}` placeholders and be sent from the browser, with the response status and body shown in the app.
 
 ![DevDesk application](./screenshots/devdesk-home.png)
 
@@ -10,7 +10,7 @@ DevDesk is a small API workspace for organizing HTTP requests, collections, and 
 - Store headers, query parameters, request bodies, and request notes.
 - Define environment variables and select an active environment per workspace.
 - Substitute `{{variable}}` values in a request before sending it.
-- Send requests through the `send-request` Supabase Edge Function and inspect the response.
+- Send requests directly from the browser and inspect the response.
 - Sign in and persist application data with Supabase Auth and Postgres.
 
 ## Requirements
@@ -38,17 +38,15 @@ Start the development server:
 pnpm dev
 ```
 
-## Supabase setup
+## Sending requests
 
-Apply the SQL migration in `supabase/migrations` to your project. Deploy the Edge Function so the Send button can proxy requests:
+Requests are sent directly from the browser. The target API must allow the app's origin through CORS; APIs that do not allow browser requests cannot be called this way. CORS can also limit which response headers the browser lets the app read.
 
-```sh
-supabase login
-supabase link --project-ref your-project-ref
-supabase functions deploy send-request
-```
+Environment values used in a request are available in the browser's developer tools and network panel. Use test credentials only; do not store production secrets in the app.
 
-The function accepts authenticated Supabase function invocations, handles CORS preflight requests, and blocks common local/private IPv4 destinations. Avoid placing secrets in requests that may be shared with other workspace members.
+## Database migrations
+
+The clean-install schema and owner-scoped RLS policies are versioned in `supabase/migrations`. The older manual upgrade scripts are preserved in `supabase/legacy-migrations` for reference and should not be run on a fresh project. To apply migrations to a linked Supabase project, first inspect the pending changes with `supabase db push --dry-run --remote`, then apply them with `supabase db push --remote`. The first CLI push initializes Supabase's migration history table. Do not apply migrations to a database until the target project and dry-run output have been checked.
 
 ## Quality checks
 

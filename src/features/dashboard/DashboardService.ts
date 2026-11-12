@@ -27,48 +27,64 @@ export async function getWorkspaceSnapshot(
     return null;
   }
 
-  const { count: collections } = await supabase
+  const workspaceDbId = workspace.id;
+
+  const { count: collections, error: collectionsError } = await supabase
     .from("collections")
     .select("id", {
       count: "exact",
       head: true,
     })
-    .eq("workspace_id", workspace.id);
+    .eq("workspace_id", workspaceDbId);
 
-  const { data: collectionData } = await supabase
+  if (collectionsError) throw collectionsError;
+
+  const { data: collectionData, error: collectionDataError } = await supabase
     .from("collections")
     .select("id, created_at")
-    .eq("workspace_id", workspace.id);
+    .eq("workspace_id", workspaceDbId);
+
+  if (collectionDataError) throw collectionDataError;
 
   const collectionIds = collectionData?.map((item) => item.id) ?? [];
 
-  const { count: requests } = await supabase
-    .from("requests")
-    .select("id", {
-      count: "exact",
-      head: true,
-    })
-    .in("collection_id", collectionIds);
+  const { count: requests, error: requestsError } = collectionIds.length
+    ? await supabase
+        .from("requests")
+        .select("id", {
+          count: "exact",
+          head: true,
+        })
+        .in("collection_id", collectionIds)
+    : { count: 0, error: null as null };
 
-  const { count: environments } = await supabase
+  if (requestsError) throw requestsError;
+
+  const { count: environments, error: environmentsError } = await supabase
     .from("environments")
     .select("id", {
       count: "exact",
       head: true,
     })
-    .eq("workspace_id", workspace.id);
+    .eq("workspace_id", workspaceDbId);
 
-  const { data: environmentData } = await supabase
+  if (environmentsError) throw environmentsError;
+
+  const { data: environmentData, error: environmentDataError } = await supabase
     .from("environments")
     .select("created_at")
-    .eq("workspace_id", workspace.id);
+    .eq("workspace_id", workspaceDbId);
 
-  const { data: requestData } = collectionIds.length
+  if (environmentDataError) throw environmentDataError;
+
+  const { data: requestData, error: requestDataError } = collectionIds.length
     ? await supabase
         .from("requests")
         .select("created_at")
         .in("collection_id", collectionIds)
-    : { data: [] };
+    : { data: [] as { created_at: string | null }[], error: null as null };
+
+  if (requestDataError) throw requestDataError;
 
   const timestamps = [
     workspace.created_at,
@@ -77,9 +93,11 @@ export async function getWorkspaceSnapshot(
     ...(environmentData ?? []).map((item) => item.created_at),
   ].filter(Boolean);
 
-  const latestActivity = timestamps.filter((value): value is string => Boolean(value)).sort(
-    (first, second) => new Date(second).getTime() - new Date(first).getTime(),
-  )[0];
+  const latestActivity = timestamps
+    .filter((value): value is string => Boolean(value))
+    .sort(
+      (first, second) => new Date(second).getTime() - new Date(first).getTime(),
+    )[0];
 
   return {
     id: workspace.id,

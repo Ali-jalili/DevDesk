@@ -13,11 +13,35 @@ import {
 } from "react-icons/fi";
 
 export default function Dashboard() {
-  const { data: workspace, isLoading: workspaceLoading } =
-    useWorkspaceSnapshot();
+  const {
+    data: workspace,
+    isLoading: workspaceLoading,
+    error: workspaceError,
+  } = useWorkspaceSnapshot();
   const { user } = useAuth();
 
   const userName = user?.user_metadata?.name || "there";
+
+  if (workspaceError) {
+    return (
+      <main className="mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
+        <div
+          role="alert"
+          className="rounded-2xl border border-red-200 bg-red-50 p-6"
+        >
+          <h1 className="text-lg font-semibold text-red-700">
+            Failed to load your workspace
+          </h1>
+          <p className="mt-2 text-sm text-red-600">
+            {workspaceError instanceof Error
+              ? workspaceError.message
+              : "An unexpected error occurred."}
+          </p>
+        </div>
+      </main>
+    );
+  }
+
   if (workspaceLoading) {
     return <DashboardSkeleton />;
   }

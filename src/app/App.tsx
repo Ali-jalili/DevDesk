@@ -3,12 +3,15 @@
 import { Toaster } from "react-hot-toast";
 
 import Router from "./router/Router";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 export default function App() {
   return (
     <>
       {" "}
-      <Router />
+      <ErrorBoundary>
+        <Router />
+      </ErrorBoundary>
       <Toaster position="top-center" />
     </>
   );

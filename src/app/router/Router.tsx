@@ -4,6 +4,8 @@ import { lazy, Suspense } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Loading from "@/ui/Loading";
+import ErrorPage from "@/page/ErrorPage";
+import NotFound from "@/page/NotFound";
 
 const Home = lazy(() => import("@/page/Home"));
 const Signup = lazy(() => import("@/page/Signup"));
@@ -110,11 +112,17 @@ const router = createBrowserRouter([
                 path: "environments/:environmentId",
                 element: <EnvironmentDetail />,
               },
+
+              {
+                path: "*",
+                element: <NotFound />,
+              },
             ],
           },
         ],
       },
     ],
+    errorElement: <ErrorPage />,
   },
 ]);
 
