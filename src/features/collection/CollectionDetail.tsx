@@ -46,7 +46,7 @@ export default function CollectionDetail() {
   }
 
   const filteredRequests = requests?.filter((request) =>
-    request.name.toLowerCase().includes(search.toLowerCase()),
+    (request.name ?? "").toLowerCase().includes(search.toLowerCase()),
   );
 
   const hasRequests = filteredRequests && filteredRequests.length > 0;

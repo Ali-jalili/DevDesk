@@ -31,14 +31,10 @@ export default function CreateWorkspace() {
 
   async function handleSubmitForm(data: FormData) {
     try {
-      const result = await createWorkspace(
+      await createWorkspace(
         data.workspaceName,
         data.workspaceDescription || "",
       );
-
-      if (result.error) {
-        throw new Error(result.error.message);
-      }
 
       toast.success("Workspace created successfully.");
 

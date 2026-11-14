@@ -258,7 +258,7 @@ export default function Workspaces() {
                     text-indigo-600
                   "
                 >
-                  {workspace.name.charAt(0).toUpperCase()}
+                  {(workspace.name ?? "W").charAt(0).toUpperCase()}
                 </div>
 
                 <h2
@@ -270,7 +270,7 @@ export default function Workspaces() {
                     text-slate-900
                   "
                 >
-                  {workspace.name}
+                  {workspace.name ?? "Untitled workspace"}
                 </h2>
 
                 <p

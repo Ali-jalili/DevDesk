@@ -4,16 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { FiArrowRight, FiGlobe } from "react-icons/fi";
 
 import EnvironmentDeleteButton from "./EnvironmentDeleteButton";
-
-type Environment = {
-  id: string;
-  name: string;
-  workspace_id: string;
-  created_at: string;
-};
+import type { EnvironmentRecord } from "@/types/database";
 
 interface EnvironmentListProps {
-  data: Environment[];
+  data: EnvironmentRecord[];
 }
 
 export default function EnvironmentList({ data }: EnvironmentListProps) {
@@ -67,7 +61,7 @@ export default function EnvironmentList({ data }: EnvironmentListProps) {
           </p>
 
           <p className="mt-4 text-xs text-slate-400">
-            Created {new Date(item.created_at).toLocaleDateString()}
+            Created {item.created_at ? new Date(item.created_at).toLocaleDateString() : "Unknown"}
           </p>
 
           <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">

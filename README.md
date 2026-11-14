@@ -1,260 +1,162 @@
 # DevDesk
 
-A Developer Workflow Workspace for organizing and managing API information during the development process.
-
-DevDesk helps developers keep API-related information structured in one centralized workspace, including API requests, collections, environments, and technical context.
-
-The goal of DevDesk is to improve API workflow organization and help developers maintain project context during development.
-
-DevDesk is not an API client and is not designed to replace tools like Postman. Its focus is managing API development workflow, organizing requests, and keeping important API information in one place.
-
----
-
-## 🚀 Live Demo
-
-
-[View Live Demo](https://devdesk-omega.vercel.app/)
----
-
-# ✨ Features
-
-## Authentication
-
-DevDesk provides secure user access through authentication.
-
-Features:
-
-- User registration
-- Login
-- Logout
-- Session management
-- Protected routes
-
----
-
-## Workspace Management
-
-Workspaces provide a dedicated space for organizing API-related information.
-
-Features:
-
-- Create workspace
-- View workspaces
-- Update workspace information
-- Manage workspace resources
-
----
-
-## Collection Management
-
-Collections allow developers to organize related API requests into structured groups.
-
-Features:
-
-- Create collections
-- Manage collections
-- Organize requests inside collections
-
----
-
-## Request Management
-
-Requests are the core entities of DevDesk.
-
-Each request stores the information developers need to understand and maintain API endpoints.
-
-Request information includes:
-
-- Name
-- HTTP Method
-- URL
-- Headers
-- Params
-- Body
-- Description
-
-The purpose is not only storing endpoints, but preserving the technical context behind APIs.
-
----
-
-## Environment Management
-
-Environments help developers manage different API configurations.
-
-Features:
-
-- Create environments
-- Manage environment variables
-- Organize API configurations
-
----
-
-## Dashboard
-
-The dashboard works as a workflow-focused command center.
-
-Instead of repeating management pages, it helps developers continue their workflow by providing:
-
-- Active workspace context
-- Workspace readiness status
-- Next recommended action
-- Current workspace overview
-
----
-
-# 🏗 Architecture
-
-DevDesk follows a Feature-Based React Architecture.
-
-The application is organized around product domains instead of file types.
-
-Main domains include:
-
-- Dashboard
-- Workspaces
-- Collections
-- Requests
-- Environments
-
-Each feature is responsible for its own:
-
-- Components
-- Hooks
-- Services
-- Business logic
-
-This structure keeps the codebase scalable, maintainable, and easier to extend.
-
----
-
-# 🛠 Tech Stack
-
-## Frontend
-
-- React
-- TypeScript
-- Vite
-- React Router
-- Tailwind CSS
-
-## Data Management
-
-- TanStack Query
-
-## Backend / Database
-
-- Supabase
-
-Used for:
-
-- Authentication
-- PostgreSQL Database
-- API Layer
-- Row Level Security
-
-## UI
-
-- Framer Motion
-
----
-# ⚡ Engineering Approach
-
-## TypeScript Strategy
-
-TypeScript is used as a core part of the application design.
-
-It is used for:
-
-- Domain modeling
-- Component contracts
-- API responses
-- Data structures
-
-The goal is to create clear and predictable communication between different parts of the application.
-
----
-
-## Data Flow
-
-DevDesk follows a separated data flow architecture:
-Component
-
-↓
-
-Custom Hook
-
-↓
-
-Service Layer
-
-↓
-
-Supabase
-
-↓
-
-Database
-
-
-This approach keeps UI components separated from data access logic and makes the code easier to maintain.
-
----
-
-# ⚡ Performance
-
-Implemented:
-
-- Route-based lazy loading
-- Code splitting
-- TanStack Query caching
-- Optimized production builds
-- Loading and error state handling
-
----
-
-# 🔐 Security
-
-Implemented:
-
-- Protected application routes
-- Environment variable configuration
-- Authentication-based access control
-- Supabase security features
-
----
-
-## 🚀 Getting Started
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/Ali-jalili/DevDesk.git
-cd DevDesk
+[![CI](https://github.com/Ali-jalili/Devdesk/actions/workflows/ci.yml/badge.svg)](https://github.com/Ali-jalili/Devdesk/actions/workflows/ci.yml)
+
+DevDesk is a browser-based API workspace for organizing, documenting, and executing HTTP requests. It combines workspace-scoped collections and environments with a visual API map and an in-browser request runner.
+
+## 🌐 Live Demo
+
+[![Live Demo](https://img.shields.io/badge/▲-LIVE%20DEMO-635BFF?style=for-the-badge&logo=vercel&logoColor=white&labelColor=111827)](https://devdesk-omega.vercel.app/)
+
+Explore the API workspace and run request workflows directly in your browser—no local setup required.
+
+## Product capabilities
+
+- **Organize API work:** Group saved requests into collections inside workspaces, with descriptions and notes for project context.
+- **Build requests:** Configure `GET`, `HEAD`, `POST`, `PUT`, `PATCH`, and `DELETE` requests with URLs, query parameters, headers, and JSON request bodies.
+- **Manage environments:** Keep variables in workspace environments, choose the active environment, and use `{{variable}}` placeholders across request fields.
+- **Import cURL:** Paste a cURL command or URL in Atlas to prefill a new request with its method, URL, headers, query parameters, and body.
+- **Map an API:** Use Atlas to browse collections and endpoints, review recently added requests, and find undocumented requests or empty collections.
+- **Inspect responses:** View response status, readable headers, body, elapsed time, and size. The response stream is capped at 1 MB to bound memory use in the UI.
+- **Protect user data:** Sign in through Supabase Auth. Row-level security policies scope workspace data to its owner.
+
+## Engineering highlights
+
+- **A testable request-preparation boundary:** [`prepareRequest`](src/features/requests/requestExecution.ts) resolves active-environment variables, reports undefined names before network activity, validates the resolved HTTP(S) URL, applies query parameters, and omits bodies for `GET` and `HEAD`.
+- **One URL rule across entry points:** [`isValidRequestUrl`](src/utils/requestUrl.ts) validates normal URLs and URLs that contain environment placeholders. The same rule is used by request forms and cURL parsing.
+- **Bounded response reading:** The response body is consumed as a stream, stopped at 1 MB, and canceled after the limit rather than reading an unbounded body into memory.
+- **Workspace-aware cache cleanup:** On successful workspace deletion, related queries are canceled and removed, and the persisted active-workspace selection moves to another workspace or is cleared. See [`useDeleteWorkspace`](src/features/workspaces/hooks/useDeleteWorkspace.ts) and [`workspaceCache`](src/features/workspaces/workspaceCache.ts).
+- **Database-enforced ownership:** RLS policies cover workspaces, collections, environments, environment variables, and requests; foreign keys cascade workspace and collection deletions through their child data. See the [base schema](supabase/migrations/20261112000000_base_schema.sql) and [owner policies](supabase/migrations/20261112000100_owner_rls.sql).
+
+## Architecture
+
+The application uses feature-oriented React modules, route-level lazy loading, and TanStack Query for server-state caching. Supabase stores the authenticated user's workspaces and related API data. Requests are executed from the browser against the target API.
+
+```mermaid
+flowchart LR
+  Auth[Supabase Auth] --> Routes[Protected React routes]
+  Routes --> Atlas[Atlas]
+  Routes --> Workspace[Workspace]
+  Workspace --> Collections[Collections]
+  Collections --> Requests[Saved requests]
+  Environment[Active environment] --> Requests
+  Requests --> BrowserFetch[Browser fetch]
+  BrowserFetch --> Target[Target API]
+  Workspace --> Database[(Supabase Postgres)]
+  Collections --> Database
+  Requests --> Database
+  Environment --> Database
+```
+
+### Main source areas
+
+```text
+src/
+├── app/                 # Router, layouts, authentication context
+├── components/          # Shared application UI
+├── features/
+│   ├── atlas/           # API map, overview panels, cURL import
+│   ├── collection/      # Collection management
+│   ├── environments/    # Environments and variables
+│   ├── requests/        # Request forms, persistence, execution, response view
+│   └── workspaces/      # Workspace selection and management
+├── page/                # Public pages and route error handling
+├── lib/                 # Supabase client and shared library setup
+└── utils/               # URL, variable, cURL, and data helpers
+```
+
+### Data relationships
+
+```text
+User
+└── Workspaces
+    ├── Collections
+    │   └── Requests
+    └── Environments
+        └── Environment variables
+```
+
+Requests belong to collections, and collections and environments belong to a workspace. Row-level security checks ownership through those parent relationships, so data access is enforced by Postgres as well as the client UI.
+
+## Technology
+
+| Area | Tools |
+| --- | --- |
+| UI | React 19, TypeScript, Tailwind CSS 4 |
+| Routing and data | React Router 7, TanStack Query 5 |
+| Forms | React Hook Form, Zod |
+| Backend | Supabase Auth, Postgres, and row-level security |
+| Build and tests | Vite 8, Vitest 5, Testing Library, ESLint |
+
+## Requirements
+
+- Node.js 22 or newer
+- pnpm 10
+- A Supabase project with the migrations in `supabase/migrations` applied
+
+## Run locally
+
+```sh
 pnpm install
+```
+
+Copy `.env.example` to `.env` and configure your Supabase project:
+
+```dotenv
+VITE_SUPABASE_URL=https://your-project-ref.supabase.co
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
+```
+
+For PowerShell, the copy command is:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Start the development server:
+
+```sh
 pnpm dev
-# 🧭 Future Improvements
+```
 
-Potential future improvements:
+Vite serves the app at `http://127.0.0.1:5173` by default. The configured port is strict, so the server exits if that port is already in use.
 
-- API request execution engine
-- Response viewer
-- Request history
-- Advanced environment management
-- API testing workflows
-- Shared workspaces
-- Team collaboration features
+## Supabase migrations
 
----
+The clean-install schema and owner-scoped RLS policies are maintained in `supabase/migrations`. The scripts in `supabase/legacy-migrations` are retained for reference and are not the clean-install path.
 
-# 🎯 Project Goal
+With the Supabase CLI installed, authenticated, and linked to the intended project, inspect the pending migration plan before applying it:
 
-DevDesk was built to demonstrate the ability to create a production-style frontend application with:
+```sh
+supabase db push --dry-run --remote
+supabase db push --remote
+```
 
-- Clean React architecture
-- TypeScript domain modeling
-- Real-world data management
-- Authentication flows
-- Scalable application structure
-- Product-oriented development decisions
+Check the linked project and dry-run output before changing a remote database. The migrations establish workspace ownership and cascading relationships for environments, collections, variables, and requests.
 
----
+## Quality checks
+
+```sh
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm build
+```
+
+GitHub Actions runs lint, type checking, unit/component tests, and a production build for pushes and pull requests. Tests cover URL validation, variable interpolation and request preparation, cURL parsing, form validation, workspace selection/cache behavior, Supabase service behavior, and key UI flows. `pnpm preview` serves the production build locally after `pnpm build`.
+
+## Request execution limits
+
+Requests run in the user's browser. The target API must allow the DevDesk origin through CORS; browser CORS rules may also restrict which response headers are readable. This is a browser-based request runner, not a server-side proxy.
+
+## Security
+
+The Supabase anon key is used by the browser client and is not a substitute for access control; database access relies on the owner-scoped RLS policies. Environment values and request contents can be inspected in DevTools and the browser network panel. Use test or otherwise non-sensitive values in browser requests, and never put a Supabase service-role key or production secret in a `VITE_` variable.
+
+## 👨‍💻 Author
+
+**Ali Jalili** — Frontend Developer
+
+- **Portfolio:** [ali-jalili-dev.vercel.app](https://ali-jalili-dev.vercel.app/)
+- **LinkedIn:** [Ali Jalili](https://www.linkedin.com/in/ali--jalili/)
+- **Email:** [ali.jalili.dev@gmail.com](mailto:ali.jalili.dev@gmail.com)

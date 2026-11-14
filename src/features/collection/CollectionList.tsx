@@ -14,20 +14,10 @@ import { useNavigate } from "react-router-dom";
 
 import EditCollectionModal from "./EditCollectionModal";
 import DeleteCollectionAlert from "./DeleteCollectionAlert";
-
-type Collection = {
-  id: string;
-  name: string;
-  description: string;
-  workspace_id: string;
-
-  requests: {
-    count: number;
-  }[];
-};
+import type { CollectionWithRequestCount } from "@/types/database";
 
 interface CollectionListProps {
-  collections: Collection[];
+  collections: CollectionWithRequestCount[];
 }
 
 function CollectionList({ collections }: CollectionListProps) {
@@ -36,14 +26,14 @@ function CollectionList({ collections }: CollectionListProps) {
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
   const [selectedCollection, setSelectedCollection] =
-    useState<Collection | null>(null);
+    useState<CollectionWithRequestCount | null>(null);
 
   const [selectedCollectionToDelete, setSelectedCollectionToDelete] =
-    useState<Collection | null>(null);
+    useState<CollectionWithRequestCount | null>(null);
 
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
 
-  function openEdit(collection: Collection) {
+  function openEdit(collection: CollectionWithRequestCount) {
     setOpenMenuId(null);
 
     setSelectedCollection(collection);
@@ -264,9 +254,9 @@ function CollectionList({ collections }: CollectionListProps) {
       {selectedCollection && (
         <EditCollectionModal
           collectionId={selectedCollection.id}
-          workspaceId={selectedCollection.workspace_id}
-          name={selectedCollection.name}
-          description={selectedCollection.description}
+          workspaceId={selectedCollection.workspace_id ?? ""}
+          name={selectedCollection.name ?? "Untitled collection"}
+          description={selectedCollection.description ?? ""}
           onClose={closeEdit}
         />
       )}
@@ -274,7 +264,7 @@ function CollectionList({ collections }: CollectionListProps) {
       {selectedCollectionToDelete && (
         <DeleteCollectionAlert
           collectionId={selectedCollectionToDelete.id}
-          workspaceId={selectedCollectionToDelete.workspace_id}
+          workspaceId={selectedCollectionToDelete.workspace_id ?? ""}
           open={isDeleteAlertOpen}
           onOpenChange={setIsDeleteAlertOpen}
         />

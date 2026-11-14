@@ -12,7 +12,7 @@ import { AuthProvider } from "./app/context/AuthContext.tsx";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 0,
+      staleTime: 60 * 1000,
       refetchOnWindowFocus: true,
       retry: 1,
     },

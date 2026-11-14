@@ -7,6 +7,8 @@ dist/
 # environment variables
 .env
 .env.*
+!.env.example
+.edge-profile/
 
 # editor
 .vscode/

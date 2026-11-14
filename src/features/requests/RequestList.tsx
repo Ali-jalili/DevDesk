@@ -5,31 +5,10 @@ import Loading from "@/ui/Loading";
 import { useNavigate } from "react-router-dom";
 
 import { FiArrowRight, FiGlobe } from "react-icons/fi";
-
-type Request = {
-  id: string;
-
-  name: string;
-
-  method: string;
-
-  url: string;
-
-  headers: Record<string, string>;
-
-  params: Record<string, string>;
-
-  body: string;
-
-  description: string;
-
-  collection_id: string;
-
-  created_at: string;
-};
+import type { RequestRecord } from "@/types/database";
 
 interface RequestListProps {
-  data: Request[];
+  data: RequestRecord[];
 
   workspaceId: string;
 
@@ -131,10 +110,10 @@ export default function RequestList({
                     py-1
                     text-xs
                     font-bold
-                    ${methodStyle(item.method)}
+                    ${methodStyle(item.method ?? "GET")}
                   `}
                 >
-                  {item.method.toUpperCase()}
+                  {(item.method ?? "GET").toUpperCase()}
                 </span>
 
                 <FiGlobe className="h-4 w-4 text-slate-400" />

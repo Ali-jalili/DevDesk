@@ -17,7 +17,9 @@ async function createCollection({
     workspace_id: workspaceId,
   });
 
-  return { data, error };
+  if (error) throw new Error(error.message);
+
+  return data;
 }
 
 async function getCollections(workspaceId: string) {
@@ -62,7 +64,7 @@ async function getCollectionById(collectionId: string) {
     .from("collections")
     .select("*")
     .eq("id", collectionId)
-    .single();
+    .maybeSingle();
   if (error) throw new Error(error.message);
 
   return data;

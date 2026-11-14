@@ -1,6 +1,26 @@
 /** @format */
 
 import supabase from "@/lib/supabase";
+import type { Json, KeyValueMap, Requests, RequestRecord } from "@/types/database";
+
+function toKeyValueMap(value: Json | null): KeyValueMap | null {
+  if (value === null) return null;
+  if (typeof value !== "object" || Array.isArray(value)) return {};
+
+  return Object.fromEntries(
+    Object.entries(value).filter((entry): entry is [string, string] =>
+      typeof entry[1] === "string",
+    ),
+  );
+}
+
+function toRequestRecord(row: Requests): RequestRecord {
+  return {
+    ...row,
+    headers: toKeyValueMap(row.headers),
+    params: toKeyValueMap(row.params),
+  };
+}
 
 async function createRequest({
   name,
@@ -41,7 +61,9 @@ async function createRequest({
     collection_id: collectionId,
   });
 
-  return { data, error };
+  if (error) throw new Error(error.message);
+
+  return data;
 }
 
 async function getRequests(collectionId: string) {
@@ -52,7 +74,7 @@ async function getRequests(collectionId: string) {
 
   if (error) throw new Error(error.message);
 
-  return data;
+  return data.map(toRequestRecord);
 }
 
 async function getRequestById(requestId: string) {
@@ -60,10 +82,10 @@ async function getRequestById(requestId: string) {
     .from("requests")
     .select("*")
     .eq("id", requestId)
-    .single();
+    .maybeSingle();
   if (error) throw new Error(error.message);
 
-  return data;
+  return data ? toRequestRecord(data) : null;
 }
 
 async function updateRequest(
@@ -92,7 +114,7 @@ async function updateRequest(
     throw new Error(error.message);
   }
 
-  return data;
+  return toRequestRecord(data);
 }
 
 async function deleteRequest(requestId: string) {

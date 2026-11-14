@@ -10,12 +10,14 @@ import {
   FiBriefcase,
   FiChevronLeft,
   FiChevronRight,
-  FiGrid,
+  FiGitMerge,
   FiLogOut,
   FiX,
 } from "react-icons/fi";
+import { useEffect, useRef } from "react";
 
 import useAuth from "@/app/context/useAuth";
+import useWorkspaces from "@/features/workspaces/hooks/useWorkspaces";
 import WorkspaceSidebarNav from "./WorkspaceSidebarNav";
 
 interface SidebarProps {
@@ -27,9 +29,9 @@ interface SidebarProps {
 
 const navigation = [
   {
-    label: "Dashboard",
-    to: "/app/dashboard",
-    icon: FiGrid,
+    label: "Atlas",
+    to: "/app/atlas",
+    icon: FiGitMerge,
   },
   {
     label: "Workspaces",
@@ -45,6 +47,7 @@ export default function Sidebar({
   onClose,
 }: SidebarProps) {
   const { user, handleSignOut } = useAuth();
+  const { data: workspaces, isLoading: isLoadingWorkspaces } = useWorkspaces();
 
   const { workspaceId } = useParams<{
     workspaceId?: string;
@@ -54,6 +57,28 @@ export default function Sidebar({
   const avatar = userName.charAt(0).toUpperCase();
 
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const sidebarRef = useRef<HTMLElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Focus management: when mobile drawer opens, focus the close button so
+  // keyboard users don't get stranded on the menu toggle that opened it.
+  useEffect(() => {
+    if (mobileOpen) {
+      closeButtonRef.current?.focus();
+    }
+  }, [mobileOpen]);
+
+  // ESC closes the mobile drawer.
+  useEffect(() => {
+    if (!mobileOpen) return;
+    function handleKey(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    }
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [mobileOpen, onClose]);
 
   async function logoutHandler() {
     try {
@@ -84,24 +109,25 @@ export default function Sidebar({
       )}
 
       <aside
+        ref={sidebarRef}
         className={`
           fixed left-0 top-16 z-50
           h-[calc(100vh-64px)]
-          border-r border-slate-200
+          border-r border-slate-200/80
           bg-white
-          transition-all duration-200
 
           w-72
+          transition-all duration-200 ease-in-out
+          ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
 
-          md:sticky md:z-30
+          md:sticky md:z-30 md:translate-x-0
           ${collapsed ? "md:w-[69px]" : "md:w-60"}
-
-          ${mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
         `}
       >
         <div className="flex h-full flex-col p-3">
           <div className="mb-3 flex justify-end md:hidden">
             <button
+              ref={closeButtonRef}
               type="button"
               onClick={onClose}
               className="
@@ -109,14 +135,16 @@ export default function Sidebar({
                 text-slate-500
                 transition
                 hover:bg-slate-100
+                focus:outline-none focus:ring-2 focus:ring-indigo-500/40
               "
+              aria-label="Close navigation"
             >
               <FiX className="h-5 w-5" />
             </button>
           </div>
 
-          {/* Navigation */}
-          <nav className="space-y-1">
+          {/* Global navigation */}
+          <nav aria-label="Global navigation" className="space-y-1">
             {navigation.map((item) => {
               const Icon = item.icon;
 
@@ -124,9 +152,9 @@ export default function Sidebar({
                 <NavLink
                   key={item.to}
                   to={item.to}
-                  end={item.to === "/app/dashboard"}
+                  end={item.to === "/app/atlas"}
                   onClick={onClose}
-                  title={collapsed ? item.label : undefined}
+                  aria-label={collapsed ? item.label : undefined}
                   className={({ isActive }) => `
           flex items-center
           rounded-lg
@@ -150,12 +178,16 @@ export default function Sidebar({
               );
             })}
 
-            {/* انیمیشن با CSS transition - بدون useEffect و بدون کتابخونه */}
+            {/* Workspace-scoped navigation (CSS-only transition, no state) */}
             <div
               className={`
-                mt-4 overflow-hidden border-t border-slate-200 pt-4
-                transition-all duration-300 ease-in-out
-                ${workspaceId ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"}
+                overflow-hidden border-t border-slate-200 pt-4
+                transition-[max-height,opacity] duration-300 ease-in-out
+                ${
+                  workspaceId && !collapsed
+                    ? "max-h-[600px] opacity-100"
+                    : "max-h-0 opacity-0"
+                }
               `}
             >
               {!collapsed && (
@@ -168,6 +200,24 @@ export default function Sidebar({
               )}
             </div>
           </nav>
+
+          {user &&
+            !isLoadingWorkspaces &&
+            workspaces?.length === 0 && (
+              <section className="mt-4 rounded-xl border border-dashed border-indigo-200 bg-indigo-50/70 p-3">
+                <p className="text-sm font-semibold text-slate-800">
+                  Create a workspace to get started
+                </p>
+                <NavLink
+                  to="/app/workspaces/new"
+                  onClick={onClose}
+                  className="mt-3 inline-flex min-h-10 w-full items-center justify-center rounded-lg bg-indigo-600 px-3 text-sm font-semibold text-white hover:bg-indigo-700"
+                >
+                  Create workspace
+                </NavLink>
+              </section>
+            )}
+
           <div className="mt-auto space-y-3">
             <div
               className={`
@@ -247,8 +297,10 @@ export default function Sidebar({
               <button
                 type="button"
                 onClick={onToggle}
+                aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
                 className={`
-                  flex w-full items-center
+                  hidden
+                  w-full items-center
                   rounded-lg
                   px-3 py-2.5
                   text-sm font-medium
@@ -256,8 +308,9 @@ export default function Sidebar({
                   transition
                   hover:bg-slate-50
                   hover:text-slate-950
+                  md:flex
 
-                  ${collapsed ? "justify-center" : ""}
+                  ${collapsed ? "md:justify-center" : ""}
                 `}
               >
                 {collapsed ? (

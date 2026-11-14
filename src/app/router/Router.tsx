@@ -1,9 +1,11 @@
 /** @format */
 
 import { lazy, Suspense } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 
 import Loading from "@/ui/Loading";
+import ErrorPage from "@/page/ErrorPage";
+import NotFound from "@/page/NotFound";
 
 const Home = lazy(() => import("@/page/Home"));
 const Signup = lazy(() => import("@/page/Signup"));
@@ -19,7 +21,7 @@ const WorkspaceOverview = lazy(
   () => import("@/features/workspaces/WorkspaceOverview"),
 );
 const CreateWorkspace = lazy(
-  () => import("@/features/workspaces/CreateWorkspace "),
+  () => import("@/features/workspaces/CreateWorkspace"),
 );
 const Collections = lazy(() => import("@/features/collection/Collections"));
 const CollectionDetail = lazy(
@@ -31,11 +33,12 @@ const Environments = lazy(() => import("@/features/environments/Environments"));
 const EnvironmentDetail = lazy(
   () => import("@/features/environments/EnvironmentDetail"),
 );
-const Dashboard = lazy(() => import("@/features/dashboard/Dashboard"));
+const AtlasPage = lazy(() => import("@/features/atlas/AtlasPage"));
 
 const router = createBrowserRouter([
   {
     element: <PublicLayout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/",
@@ -50,6 +53,10 @@ const router = createBrowserRouter([
         path: "/signup",
         element: <Signup />,
       },
+      {
+        path: "*",
+        element: <NotFound />,
+      },
     ],
   },
 
@@ -62,7 +69,11 @@ const router = createBrowserRouter([
         children: [
           {
             path: "dashboard",
-            element: <Dashboard />,
+            element: <Navigate to="/app/atlas" replace />,
+          },
+          {
+            path: "atlas",
+            element: <AtlasPage />,
           },
 
           {
@@ -110,11 +121,21 @@ const router = createBrowserRouter([
                 path: "environments/:environmentId",
                 element: <EnvironmentDetail />,
               },
+
+              {
+                path: "*",
+                element: <NotFound />,
+              },
             ],
           },
         ],
       },
     ],
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 

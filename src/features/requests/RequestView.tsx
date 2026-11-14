@@ -2,25 +2,12 @@
 
 import RequestDeleteButton from "./RequestDeleteButton";
 import { FiEdit3, FiCode } from "react-icons/fi";
-
-type Request = {
-  id: string;
-  name: string;
-  method: string;
-  url: string;
-  headers: Record<string, string>;
-  params: Record<string, string>;
-  body: string;
-  description: string;
-  example_request: string;
-  example_response: string;
-  notes: string;
-  collection_id: string;
-  created_at: string;
-};
+import SendRequest from "./SendRequest";
+import type { RequestRecord } from "@/types/database";
 
 interface RequestViewProps {
-  data: Request;
+  data: RequestRecord;
+  activeEnvironmentId: string | null;
   onEdit: () => void;
   onDeleteSuccess: () => void;
 }
@@ -42,6 +29,7 @@ function methodStyle(method: string) {
 
 export default function RequestView({
   data,
+  activeEnvironmentId,
   onEdit,
   onDeleteSuccess,
 }: RequestViewProps) {
@@ -54,17 +42,17 @@ export default function RequestView({
             <div className="flex items-center gap-3">
               <span
                 className={`rounded-md px-3 py-1 text-xs font-bold ${methodStyle(
-                  data.method,
+                  data.method ?? "GET",
                 )}`}
               >
-                {data.method.toUpperCase()}
+                {(data.method ?? "GET").toUpperCase()}
               </span>
               <h1 className="truncate text-xl font-bold text-slate-950">
-                {data.name}
+                {data.name ?? "Untitled request"}
               </h1>
             </div>
             <p className="mt-4 truncate rounded-lg bg-slate-50 px-3 py-2 text-sm text-slate-600">
-              {data.url}
+              {data.url ?? ""}
             </p>
           </div>
 
@@ -78,6 +66,8 @@ export default function RequestView({
         </div>
       </section>
 
+      <SendRequest request={data} activeEnvironmentId={activeEnvironmentId} />
+
       {/* Headers */}
       {Object.keys(data.headers || {}).length > 0 && (
         <section className="rounded-2xl border border-slate-200 bg-white p-5">
@@ -86,7 +76,7 @@ export default function RequestView({
             Headers
           </h2>
           <div className="mt-4 space-y-2">
-            {Object.entries(data.headers).map(([key, value]) => (
+            {Object.entries(data.headers ?? {}).map(([key, value]) => (
               <div
                 key={key}
                 className="flex justify-between gap-4 rounded-lg bg-slate-50 px-3 py-2 text-sm"
@@ -104,7 +94,7 @@ export default function RequestView({
         <section className="rounded-2xl border border-slate-200 bg-white p-5">
           <h2 className="font-semibold text-slate-950">Params</h2>
           <div className="mt-4 space-y-2">
-            {Object.entries(data.params).map(([key, value]) => (
+            {Object.entries(data.params ?? {}).map(([key, value]) => (
               <div
                 key={key}
                 className="flex justify-between rounded-lg bg-slate-50 px-3 py-2 text-sm"
