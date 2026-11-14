@@ -1,12 +1,8 @@
 # DevDesk
 
-[![CI](https://github.com/Ali-jalili/Devdesk/actions/workflows/ci.yml/badge.svg)](https://github.com/Ali-jalili/Devdesk/actions/workflows/ci.yml)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Open%20DevDesk-635BFF?style=for-the-badge&logo=vercel&logoColor=white)](https://devdesk-omega.vercel.app/) [![CI](https://github.com/Ali-jalili/Devdesk/actions/workflows/ci.yml/badge.svg)](https://github.com/Ali-jalili/Devdesk/actions/workflows/ci.yml)
 
 DevDesk is a browser-based API workspace for organizing, documenting, and executing HTTP requests. It combines workspace-scoped collections and environments with a visual API map and an in-browser request runner.
-
-## Try DevDesk
-
-[![Open the live app](https://img.shields.io/badge/Launch-DevDesk-635BFF?style=for-the-badge&logo=vercel&logoColor=white)](https://devdesk-omega.vercel.app/)
 
 ## Product capabilities
 
