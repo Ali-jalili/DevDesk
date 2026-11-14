@@ -34,7 +34,7 @@ async function getWorkspaceById(workspaceId: string) {
     .from("workspaces")
     .select("*")
     .eq("id", workspaceId)
-    .single();
+    .maybeSingle();
 
   if (error) throw new Error(error.message);
 

@@ -17,6 +17,7 @@ import {
 import { useEffect, useRef } from "react";
 
 import useAuth from "@/app/context/useAuth";
+import useWorkspaces from "@/features/workspaces/hooks/useWorkspaces";
 import WorkspaceSidebarNav from "./WorkspaceSidebarNav";
 
 interface SidebarProps {
@@ -46,6 +47,7 @@ export default function Sidebar({
   onClose,
 }: SidebarProps) {
   const { user, handleSignOut } = useAuth();
+  const { data: workspaces, isLoading: isLoadingWorkspaces } = useWorkspaces();
 
   const { workspaceId } = useParams<{
     workspaceId?: string;
@@ -198,6 +200,24 @@ export default function Sidebar({
               )}
             </div>
           </nav>
+
+          {user &&
+            !isLoadingWorkspaces &&
+            workspaces?.length === 0 && (
+              <section className="mt-4 rounded-xl border border-dashed border-indigo-200 bg-indigo-50/70 p-3">
+                <p className="text-sm font-semibold text-slate-800">
+                  Create a workspace to get started
+                </p>
+                <NavLink
+                  to="/app/workspaces/new"
+                  onClick={onClose}
+                  className="mt-3 inline-flex min-h-10 w-full items-center justify-center rounded-lg bg-indigo-600 px-3 text-sm font-semibold text-white hover:bg-indigo-700"
+                >
+                  Create workspace
+                </NavLink>
+              </section>
+            )}
+
           <div className="mt-auto space-y-3">
             <div
               className={`

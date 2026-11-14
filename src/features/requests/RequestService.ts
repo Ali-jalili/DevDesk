@@ -82,10 +82,10 @@ async function getRequestById(requestId: string) {
     .from("requests")
     .select("*")
     .eq("id", requestId)
-    .single();
+    .maybeSingle();
   if (error) throw new Error(error.message);
 
-  return toRequestRecord(data);
+  return data ? toRequestRecord(data) : null;
 }
 
 async function updateRequest(

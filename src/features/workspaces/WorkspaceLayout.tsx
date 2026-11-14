@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { Outlet, useParams } from "react-router-dom";
+import { Link, Outlet, useParams } from "react-router-dom";
 
 import { FiEdit3, FiGlobe } from "react-icons/fi";
 
@@ -15,6 +15,7 @@ import ErrorMessage from "@/components/ErrorMessage";
 
 import EditWorkspaceModal from "./EditWorkspaceModal";
 import useAuth from "@/app/context/useAuth";
+import { setLastWorkspaceForUser } from "./workspaceSelection";
 
 export default function WorkspaceLayout() {
   const { user } = useAuth();
@@ -31,9 +32,7 @@ export default function WorkspaceLayout() {
 
   useEffect(() => {
     if (user?.id && workspaceId) {
-      const lastWorkspaceKey = `devdesk:last-workspace:${user.id}`;
-      localStorage.setItem(lastWorkspaceKey, workspaceId);
-      window.dispatchEvent(new Event("devdesk:last-workspace-changed"));
+      setLastWorkspaceForUser(user.id, workspaceId);
     }
   }, [user?.id, workspaceId]);
 
@@ -49,7 +48,11 @@ export default function WorkspaceLayout() {
   }
 
   if (!data || !workspaceId) {
-    return null;
+    return (
+      <main className="min-h-[calc(100vh-4rem)] bg-slate-50 px-4 py-10 text-center text-sm text-slate-600">
+        Workspace not found. <Link className="font-semibold text-indigo-600" to="/app/workspaces">Browse workspaces</Link>
+      </main>
+    );
   }
 
   return (

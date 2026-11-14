@@ -28,7 +28,9 @@ export default function useAtlas() {
     queryFn: async () => {
       const selected = workspaceId ? await getWorkspaceById(workspaceId) : (await getWorkspaces())[0];
       if (!selected) return null;
-      return { ...(await getAtlas(selected.id)), workspaceId: selected.id };
+      const atlas = await getAtlas(selected.id);
+      if (!atlas) return null;
+      return { ...atlas, workspaceId: selected.id };
     },
   });
 }

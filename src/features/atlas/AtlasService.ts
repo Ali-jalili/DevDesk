@@ -11,15 +11,16 @@ function toRecord(value: unknown): Record<string, string> | null {
   return Object.fromEntries(Object.entries(value).filter((entry): entry is [string, string] => typeof entry[1] === "string"));
 }
 
-export async function getAtlas(workspaceId: string): Promise<AtlasPayload> {
+export async function getAtlas(workspaceId: string): Promise<AtlasPayload | null> {
   const [collectionsResult, workspaceResult, environmentsResult] = await Promise.all([
     supabase.from("collections").select("id,name,created_at,requests(id,method,url,description,created_at,headers,params,body)").eq("workspace_id", workspaceId).order("created_at"),
-    supabase.from("workspaces").select("active_environment_id,name").eq("id", workspaceId).single(),
+    supabase.from("workspaces").select("active_environment_id,name").eq("id", workspaceId).maybeSingle(),
     supabase.from("environments").select("id,name,environment_variables(count)").eq("workspace_id", workspaceId).order("created_at"),
   ]);
   if (collectionsResult.error) throw new Error(collectionsResult.error.message);
   if (workspaceResult.error) throw new Error(workspaceResult.error.message);
   if (environmentsResult.error) throw new Error(environmentsResult.error.message);
+  if (!workspaceResult.data) return null;
 
   const lines: AtlasLine[] = collectionsResult.data.map((collection) => ({
     id: collection.id,
