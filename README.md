@@ -1,6 +1,6 @@
 # DevDesk
 
-[![CI](https://github.com/Ali-jalili/Devdesk/actions/workflows/ci.yml/badge.svg)](https://github.com/Ali-jalili/Devdesk/actions/workflows/ci.yml)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Open%20DevDesk-635BFF?style=for-the-badge&logo=vercel&logoColor=white)](https://devdesk-omega.vercel.app/) [![CI](https://github.com/Ali-jalili/Devdesk/actions/workflows/ci.yml/badge.svg)](https://github.com/Ali-jalili/Devdesk/actions/workflows/ci.yml)
 
 DevDesk is a browser-based API workspace for organizing, documenting, and executing HTTP requests. It combines workspace-scoped collections and environments with a visual API map and an in-browser request runner.
 
@@ -146,3 +146,11 @@ Requests run in the user's browser. The target API must allow the DevDesk origin
 ## Security
 
 The Supabase anon key is used by the browser client and is not a substitute for access control; database access relies on the owner-scoped RLS policies. Environment values and request contents can be inspected in DevTools and the browser network panel. Use test or otherwise non-sensitive values in browser requests, and never put a Supabase service-role key or production secret in a `VITE_` variable.
+
+## 👨‍💻 Author
+
+**Ali Jalili** — Frontend Developer
+
+- **Portfolio:** [ali-jalili-dev.vercel.app](https://ali-jalili-dev.vercel.app/)
+- **LinkedIn:** [Ali Jalili](https://www.linkedin.com/in/ali--jalili/)
+- **Email:** [ali.jalili.dev@gmail.com](mailto:ali.jalili.dev@gmail.com)
