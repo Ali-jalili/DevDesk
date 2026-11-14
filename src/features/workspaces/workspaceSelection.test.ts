@@ -1,7 +1,10 @@
 /** @format */
 
 import { describe, expect, it } from "vitest";
-import { pickNextWorkspaceId } from "./workspaceSelection";
+import {
+  isWorkspaceSelectionValid,
+  pickNextWorkspaceId,
+} from "./workspaceSelection";
 
 const workspaces = [
   { id: "active", name: "Active" },
@@ -19,5 +22,14 @@ describe("pickNextWorkspaceId", () => {
 
   it("clears selection when the last workspace is deleted", () => {
     expect(pickNextWorkspaceId([workspaces[0]], "active", "active")).toBeNull();
+  });
+});
+
+describe("isWorkspaceSelectionValid", () => {
+  it("only selects a workspace after its route record loads", () => {
+    expect(isWorkspaceSelectionValid("route", undefined)).toBe(false);
+    expect(isWorkspaceSelectionValid("route", null)).toBe(false);
+    expect(isWorkspaceSelectionValid("route", "another")).toBe(false);
+    expect(isWorkspaceSelectionValid("route", "route")).toBe(true);
   });
 });

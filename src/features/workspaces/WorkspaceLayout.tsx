@@ -15,7 +15,10 @@ import ErrorMessage from "@/components/ErrorMessage";
 
 import EditWorkspaceModal from "./EditWorkspaceModal";
 import useAuth from "@/app/context/useAuth";
-import { setLastWorkspaceForUser } from "./workspaceSelection";
+import {
+  isWorkspaceSelectionValid,
+  setLastWorkspaceForUser,
+} from "./workspaceSelection";
 
 export default function WorkspaceLayout() {
   const { user } = useAuth();
@@ -31,10 +34,14 @@ export default function WorkspaceLayout() {
   const { data: environments } = useGetEnvironments(workspaceId);
 
   useEffect(() => {
-    if (user?.id && workspaceId) {
+    if (
+      user?.id &&
+      workspaceId &&
+      isWorkspaceSelectionValid(workspaceId, data?.id)
+    ) {
       setLastWorkspaceForUser(user.id, workspaceId);
     }
-  }, [user?.id, workspaceId]);
+  }, [user?.id, workspaceId, data?.id]);
 
   const { mutate: updateEnvironment, isPending: isUpdatingEnvironment } =
     useUpdateWorkspaceEnvironment();

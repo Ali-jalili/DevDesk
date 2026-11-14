@@ -84,7 +84,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
           <div className="flex shrink-0 items-center">
             {activeName ? (
               <NavLink
-                to={`/app/workspaces/${currentWorkspaceId ?? workspace?.id}`}
+                to={`/app/workspaces/${workspace?.id ?? currentWorkspaceId}`}
                 className="group flex items-center gap-2.5 rounded-full border border-slate-200 bg-white/80 py-1 pl-1 pr-3 shadow-sm transition hover:border-indigo-300 hover:shadow dark:border-white/10 dark:bg-white/5 dark:hover:border-indigo-500/40"
               >
                 <span className="relative flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-500 text-white">

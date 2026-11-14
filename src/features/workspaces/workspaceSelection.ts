@@ -4,6 +4,13 @@ export interface WorkspaceOption {
   id: string;
 }
 
+export function isWorkspaceSelectionValid(
+  routeWorkspaceId: string | undefined,
+  loadedWorkspaceId: string | null | undefined,
+) {
+  return Boolean(routeWorkspaceId && routeWorkspaceId === loadedWorkspaceId);
+}
+
 export function pickNextWorkspaceId(
   workspaces: WorkspaceOption[],
   activeWorkspaceId: string | null,
