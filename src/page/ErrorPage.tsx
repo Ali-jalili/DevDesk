@@ -20,7 +20,7 @@ export default function ErrorPage() {
             "An unexpected error occurred while loading this page."}
         </p>
         <Link
-          to="/app/dashboard"
+          to="/app/atlas"
           className="mt-6 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition hover:opacity-90"
         >
           Back to dashboard

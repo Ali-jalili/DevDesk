@@ -20,6 +20,8 @@ function toKeyValueItems(
 interface RequestFormProps {
   /** In create mode leave undefined; in edit mode pass the record to prefill. */
   initialValues?: RequestRecord;
+  /** Optional values imported from a cURL command. */
+  prefill?: Partial<RequestFormData>;
   /** "create" renders creation affordances, "edit" renders save/cancel. */
   mode: "create" | "edit";
   onSubmit: (values: {
@@ -40,6 +42,7 @@ interface RequestFormProps {
 
 export default function RequestForm({
   initialValues,
+  prefill,
   mode,
   onSubmit,
   isPending,
@@ -65,6 +68,7 @@ export default function RequestForm({
       example_request: initialValues?.example_request ?? "",
       example_response: initialValues?.example_response ?? "",
       notes: initialValues?.notes ?? "",
+      ...prefill,
     },
   });
 

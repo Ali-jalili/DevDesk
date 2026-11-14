@@ -14,7 +14,7 @@ export default function NotFound() {
           The page you are looking for does not exist or has been moved.
         </p>
         <Link
-          to="/app/dashboard"
+          to="/app/atlas"
           className="mt-6 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition hover:opacity-90"
         >
           Back to dashboard

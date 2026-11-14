@@ -85,7 +85,7 @@ export default function Login() {
 
         setPassword("");
 
-        navigate("/app/dashboard");
+        navigate("/app/atlas");
       }
     } catch (error) {
       toast.error(getAuthErrorMessage(error));

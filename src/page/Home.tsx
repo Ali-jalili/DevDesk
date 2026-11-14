@@ -194,10 +194,10 @@ export default function Home() {
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <NavLink
-                to={user ? "/app/dashboard" : "/signup"}
+                to={user ? "/app/atlas" : "/signup"}
                 className="group inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-600/25 transition duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-600/30"
               >
-                {user ? "Go to Dashboard" : "Get Started"}
+                {user ? "Open Atlas" : "Get Started"}
                 <FiArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </NavLink>
 
@@ -246,7 +246,7 @@ export default function Home() {
 
                   <div className="space-y-1 text-xs">
                     <div className="rounded-md bg-indigo-100/70 px-2.5 py-2 font-medium text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-300">
-                      Dashboard
+                      Atlas
                     </div>
 
                     <div className="px-2.5 py-2 text-slate-500 dark:text-slate-400">
@@ -593,7 +593,7 @@ export default function Home() {
 
             <div className="relative mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <NavLink
-                to={user ? "/app/dashboard" : "/signup"}
+                to={user ? "/app/atlas" : "/signup"}
                 className="inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-semibold text-indigo-700 shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl"
               >
                 {user ? "Open your dashboard" : "Create your workspace"}

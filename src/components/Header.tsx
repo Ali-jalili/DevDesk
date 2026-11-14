@@ -38,7 +38,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
           )}
 
           <NavLink
-            to={user ? "/app/dashboard" : "/"}
+            to={user ? "/app/atlas" : "/"}
             className="group flex min-w-0 items-center gap-3"
           >
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-500 text-white shadow-md shadow-indigo-500/25 transition group-hover:scale-105">

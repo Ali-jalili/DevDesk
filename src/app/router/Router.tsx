@@ -1,7 +1,7 @@
 /** @format */
 
 import { lazy, Suspense } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 
 import Loading from "@/ui/Loading";
 import ErrorPage from "@/page/ErrorPage";
@@ -33,7 +33,7 @@ const Environments = lazy(() => import("@/features/environments/Environments"));
 const EnvironmentDetail = lazy(
   () => import("@/features/environments/EnvironmentDetail"),
 );
-const Dashboard = lazy(() => import("@/features/dashboard/Dashboard"));
+const AtlasPage = lazy(() => import("@/features/atlas/AtlasPage"));
 
 const router = createBrowserRouter([
   {
@@ -64,7 +64,11 @@ const router = createBrowserRouter([
         children: [
           {
             path: "dashboard",
-            element: <Dashboard />,
+            element: <Navigate to="/app/atlas" replace />,
+          },
+          {
+            path: "atlas",
+            element: <AtlasPage />,
           },
 
           {

@@ -10,7 +10,7 @@ import {
   FiBriefcase,
   FiChevronLeft,
   FiChevronRight,
-  FiGrid,
+  FiGitMerge,
   FiLogOut,
   FiX,
 } from "react-icons/fi";
@@ -28,9 +28,9 @@ interface SidebarProps {
 
 const navigation = [
   {
-    label: "Dashboard",
-    to: "/app/dashboard",
-    icon: FiGrid,
+    label: "Atlas",
+    to: "/app/atlas",
+    icon: FiGitMerge,
   },
   {
     label: "Workspaces",
@@ -150,7 +150,7 @@ export default function Sidebar({
                 <NavLink
                   key={item.to}
                   to={item.to}
-                  end={item.to === "/app/dashboard"}
+                  end={item.to === "/app/atlas"}
                   onClick={onClose}
                   aria-label={collapsed ? item.label : undefined}
                   className={({ isActive }) => `

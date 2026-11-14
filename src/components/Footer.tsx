@@ -49,7 +49,7 @@ export default function Footer() {
                 Features
               </a>
               <NavLink
-                to={user ? "/app/dashboard" : "/signup"}
+                to={user ? "/app/atlas" : "/signup"}
                 className="text-sm text-slate-500 transition hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400"
               >
                 {user ? "Open dashboard" : "Get started"}

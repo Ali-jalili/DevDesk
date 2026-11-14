@@ -2,10 +2,15 @@
 
 import useCreateRequest from "./hooks/useCreateRequest";
 import toast from "react-hot-toast";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 
 import RequestForm from "./RequestForm";
+import type { RequestFormData } from "@/types/database";
+
+interface CreateRequestLocationState {
+  prefill?: Partial<RequestFormData>;
+}
 
 export default function CreateRequest() {
   const { workspaceId, collectionId } = useParams<{
@@ -13,6 +18,8 @@ export default function CreateRequest() {
     collectionId: string;
   }>();
   const navigate = useNavigate();
+  const location = useLocation();
+  const prefill = (location.state as CreateRequestLocationState | null)?.prefill;
   const { mutate, isPending } = useCreateRequest();
 
   function submitFormRequest(values: {
@@ -71,6 +78,7 @@ export default function CreateRequest() {
 
       <RequestForm
         mode="create"
+        prefill={prefill}
         onSubmit={submitFormRequest}
         isPending={isPending}
       />
