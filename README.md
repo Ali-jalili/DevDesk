@@ -1,13 +1,19 @@
 # DevDesk
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Open%20DevDesk-635BFF?style=for-the-badge&logo=vercel&logoColor=white)](https://devdesk-omega.vercel.app/) [![CI](https://github.com/Ali-jalili/Devdesk/actions/workflows/ci.yml/badge.svg)](https://github.com/Ali-jalili/Devdesk/actions/workflows/ci.yml)
+[![CI](https://github.com/Ali-jalili/Devdesk/actions/workflows/ci.yml/badge.svg)](https://github.com/Ali-jalili/Devdesk/actions/workflows/ci.yml)
 
 DevDesk is a browser-based API workspace for organizing, documenting, and executing HTTP requests. It combines workspace-scoped collections and environments with a visual API map and an in-browser request runner.
+
+## 🌐 Live Demo
+
+[![Live Demo](https://img.shields.io/badge/▲-LIVE%20DEMO-635BFF?style=for-the-badge&logo=vercel&logoColor=white&labelColor=111827)](https://devdesk-omega.vercel.app/)
+
+Explore the API workspace and run request workflows directly in your browser—no local setup required.
 
 ## Product capabilities
 
 - **Organize API work:** Group saved requests into collections inside workspaces, with descriptions and notes for project context.
-- **Build requests:** Configure `GET`, `HEAD`, `POST`, `PUT`, `PATCH`, and `DELETE` requests with URLs, query parameters, headers, and JSON or plain-text bodies.
+- **Build requests:** Configure `GET`, `HEAD`, `POST`, `PUT`, `PATCH`, and `DELETE` requests with URLs, query parameters, headers, and JSON request bodies.
 - **Manage environments:** Keep variables in workspace environments, choose the active environment, and use `{{variable}}` placeholders across request fields.
 - **Import cURL:** Paste a cURL command or URL in Atlas to prefill a new request with its method, URL, headers, query parameters, and body.
 - **Map an API:** Use Atlas to browse collections and endpoints, review recently added requests, and find undocumented requests or empty collections.
