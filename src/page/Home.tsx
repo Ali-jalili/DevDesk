@@ -114,11 +114,15 @@ function Reveal({
   delay?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  // When reduced motion is preferred, skip the reveal entirely so content is
+  // visible from the first paint (no synchronous setState inside an effect).
+  const [visible, setVisible] = useState(
+    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
 
   useEffect(() => {
+    // No reveal animation when the user prefers reduced motion — already shown.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setVisible(true);
       return;
     }
 
