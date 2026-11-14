@@ -25,4 +25,14 @@ describe("parseCurl", () => {
     expect(parseCurl("https://api.shop.dev/products?page=2")?.params).toEqual({ page: "2" });
     expect(parseCurl("curl -X POST")).toBeNull();
   });
+
+  it("preserves a base URL environment variable when parsing cURL", () => {
+    expect(parseCurl("curl '{{baseUrl}}/posts?id={{postId}}'")).toEqual({
+      method: "GET",
+      url: "{{baseUrl}}/posts",
+      headers: {},
+      params: { id: "{{postId}}" },
+      body: "",
+    });
+  });
 });

@@ -1,6 +1,6 @@
 /** @format */
 
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import type { UseFormRegister, FieldPath } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FiPlus, FiTrash2 } from "react-icons/fi";
@@ -71,6 +71,9 @@ export default function RequestForm({
       ...prefill,
     },
   });
+
+  const method = useWatch({ control, name: "method" }).toUpperCase();
+  const bodyDisabled = method === "GET" || method === "HEAD";
 
   const {
     fields: headerFields,
@@ -148,6 +151,7 @@ export default function RequestForm({
                 className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
               >
                 <option value="GET">GET</option>
+                <option value="HEAD">HEAD</option>
                 <option value="POST">POST</option>
                 <option value="PUT">PUT</option>
                 <option value="PATCH">PATCH</option>
@@ -213,14 +217,18 @@ export default function RequestForm({
           <p className="mt-1 text-sm text-muted-foreground">Request payload.</p>
         </div>
         <textarea
+          aria-label="Request Body"
+          disabled={bodyDisabled}
           {...register("body")}
           rows={10}
-          placeholder={`{
-  "username": "devdesk",
-  "password": "123456"
-}`}
-          className="w-full resize-none rounded-lg border border-border bg-slate-950 px-4 py-4 font-mono text-sm text-slate-100 outline-none transition focus:ring-2 focus:ring-primary/20"
+          placeholder='{ "key": "value" }'
+          className="w-full resize-none rounded-lg border border-border bg-slate-950 px-4 py-4 font-mono text-sm text-slate-100 outline-none transition focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-60"
         />
+        {bodyDisabled && (
+          <p className="mt-2 text-sm text-muted-foreground">
+            {method} requests don&apos;t have a body
+          </p>
+        )}
         {errors.body && (
           <p role="alert" className="mt-2 text-sm text-red-500">
             {errors.body.message}

@@ -1,5 +1,7 @@
 /** @format */
 
+import { isValidRequestUrl } from "./requestUrl";
+
 export interface ParsedCurl {
   method: string;
   url: string;
@@ -50,13 +52,28 @@ export function parseCurl(input: string): ParsedCurl | null {
       if (!method) method = "POST";
     } else if (/^https?:\/\//i.test(token) || (!token.startsWith("-") && token.includes("/"))) target = token;
   }
-  if (!target) return null;
+  if (!target || !isValidRequestUrl(target)) return null;
   try {
-    const parsed = new URL(target, "http://localhost");
+    let resolvedTarget = target.replace(/\{\{\s*[A-Za-z0-9_.-]+\s*\}\}/g, "example");
+    if (/^\{\{\s*[A-Za-z0-9_.-]+\s*\}\}/.test(target)) {
+      resolvedTarget = `https://example.com${resolvedTarget.slice("example".length)}`;
+    }
+    new URL(resolvedTarget);
     const params: Record<string, string> = {};
-    parsed.searchParams.forEach((value, key) => { params[key] = value; });
-    const url = /^https?:\/\//i.test(target) ? `${parsed.origin}${parsed.pathname}` : `${parsed.pathname}`;
-    return { method: (method || (body ? "POST" : "GET")).toUpperCase(), url, headers, params, body };
+    const queryIndex = target.search(/[?#]/);
+    const rawBase = queryIndex === -1 ? target : target.slice(0, queryIndex);
+    const questionIndex = target.indexOf("?");
+    if (questionIndex >= 0) {
+      const hashIndex = target.indexOf("#", questionIndex);
+      const rawQuery = target.slice(
+        questionIndex + 1,
+        hashIndex === -1 ? undefined : hashIndex,
+      );
+      new URLSearchParams(rawQuery).forEach((value, key) => {
+        params[key] = value;
+      });
+    }
+    return { method: (method || (body ? "POST" : "GET")).toUpperCase(), url: rawBase, headers, params, body };
   } catch {
     return null;
   }

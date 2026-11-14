@@ -4,12 +4,8 @@ import { useState } from "react";
 import { LoaderCircle, Send } from "lucide-react";
 import useGetVariables from "@/features/environments/hooks/useGetVariables";
 import type { RequestRecord } from "@/types/database";
-import {
-  interpolate,
-  findUnresolvedVariables,
-  formatResponse,
-  formatBytes,
-} from "@/utils/requestVariables";
+import { formatResponse, formatBytes } from "@/utils/requestVariables";
+import { prepareRequest } from "./requestExecution";
 
 type RequestResponse = {
   status: number;
@@ -90,55 +86,21 @@ export default function SendRequest({
     const values = Object.fromEntries(
       variables.map(({ key, value }) => [key, value]),
     );
-    const rawValues = [
-      request.url ?? "",
-      ...Object.entries(request.params ?? {}).flatMap(([key, value]) => [
-        key,
-        value,
-      ]),
-      ...Object.entries(request.headers ?? {}).flatMap(([key, value]) => [
-        key,
-        value,
-      ]),
-      request.body ?? "",
-    ];
-    const unresolved = findUnresolvedVariables(rawValues, values);
-
-    if (unresolved.length > 0) {
-      setError(
-        `Missing environment variable${unresolved.length > 1 ? "s" : ""}: ${unresolved.join(", ")}`,
-      );
+    let prepared: ReturnType<typeof prepareRequest>;
+    try {
+      prepared = prepareRequest(request, values);
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Request failed.");
       return;
     }
 
     setIsSending(true);
     try {
-      const target = new URL(interpolate(request.url ?? "", values));
-      if (!["http:", "https:"].includes(target.protocol)) {
-        throw new Error("Only HTTP and HTTPS request URLs are supported.");
-      }
-
-      for (const [key, value] of Object.entries(request.params ?? {})) {
-        target.searchParams.set(
-          interpolate(key, values),
-          interpolate(value, values),
-        );
-      }
-
-      const headers = Object.fromEntries(
-        Object.entries(request.headers ?? {}).map(([key, value]) => [
-          interpolate(key, values),
-          interpolate(value, values),
-        ]),
-      );
-      const body = request.body ? interpolate(request.body, values) : "";
-      const method = (request.method ?? "GET").toUpperCase();
       const startedAt = performance.now();
-      const result = await fetch(target.toString(), {
-        method,
-        headers,
-        body:
-          method === "GET" || method === "HEAD" ? undefined : body || undefined,
+      const result = await fetch(prepared.url, {
+        method: prepared.method,
+        headers: prepared.headers,
+        body: prepared.body,
       });
       const responseBody = await readResponseBody(result);
 
