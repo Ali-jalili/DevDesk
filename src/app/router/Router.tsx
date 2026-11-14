@@ -38,6 +38,7 @@ const AtlasPage = lazy(() => import("@/features/atlas/AtlasPage"));
 const router = createBrowserRouter([
   {
     element: <PublicLayout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/",
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: "/signup",
         element: <Signup />,
+      },
+      {
+        path: "*",
+        element: <NotFound />,
       },
     ],
   },
@@ -127,6 +132,10 @@ const router = createBrowserRouter([
       },
     ],
     errorElement: <ErrorPage />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 

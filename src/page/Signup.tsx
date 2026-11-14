@@ -10,6 +10,10 @@ import toast from "react-hot-toast";
 import { FaSpinner } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
 
+function isValidEmail(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
 export default function Signup() {
   const { handleSignUp } = useAuth();
 
@@ -40,7 +44,7 @@ export default function Signup() {
 
     if (!email.trim()) {
       newErrors.email = "Email is required.";
-    } else if (!email.includes("@")) {
+    } else if (!isValidEmail(email)) {
       newErrors.email = "Please enter a valid email.";
     }
 
@@ -102,7 +106,7 @@ export default function Signup() {
         </p>
       }
     >
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form noValidate onSubmit={handleSubmit} className="space-y-5">
             {/* Name */}
             <div>
               <label
@@ -167,7 +171,7 @@ export default function Signup() {
 
                   setEmail(value);
 
-                  if (value.includes("@")) {
+                  if (isValidEmail(value)) {
                     setErrors((prev) => ({
                       ...prev,
                       email: undefined,

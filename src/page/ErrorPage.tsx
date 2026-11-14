@@ -19,12 +19,21 @@ export default function ErrorPage() {
           {error?.message ||
             "An unexpected error occurred while loading this page."}
         </p>
-        <Link
-          to="/app/atlas"
-          className="mt-6 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition hover:opacity-90"
-        >
-          Back to dashboard
-        </Link>
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition hover:opacity-90"
+          >
+            Retry
+          </button>
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 rounded-lg border border-red-200 px-4 py-2.5 text-sm font-medium text-red-700 transition hover:bg-red-100"
+          >
+            Back home
+          </Link>
+        </div>
       </div>
     </main>
   );
