@@ -28,8 +28,8 @@ export default function AuthShell({
         <div className="absolute -bottom-64 -right-48 h-[34rem] w-[34rem] rounded-full bg-fuchsia-200/25 blur-3xl dark:bg-fuchsia-900/10" />
       </div>
 
-      <section className="relative w-full max-w-[28rem] overflow-hidden rounded-[1.75rem] border border-white/90 bg-white/95 shadow-[0_28px_90px_-38px_rgba(30,41,59,0.32)] backdrop-blur-xl dark:border-white/10 dark:bg-slate-900/95">
-        <div className="h-1 w-full bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500" />
+      <section className="relative w-full max-w-[28rem] overflow-hidden rounded-[1.5rem] border border-slate-200/80 bg-white shadow-[0_20px_60px_-24px_rgba(79,70,229,0.45),0_8px_24px_-12px_rgba(30,41,59,0.18)] ring-1 ring-white/60 backdrop-blur-xl dark:border-white/10 dark:bg-slate-900 dark:shadow-[0_20px_60px_-24px_rgba(0,0,0,0.6)]">
+        <div className="h-1.5 w-full bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500" />
 
         <div className="p-6 sm:p-9">
           <div className="mb-8 flex items-center gap-3">

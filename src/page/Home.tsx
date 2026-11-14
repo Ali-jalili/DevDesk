@@ -167,7 +167,7 @@ export default function Home() {
           <div className="absolute -right-40 top-40 h-[420px] w-[420px] rounded-full bg-gradient-to-br from-fuchsia-300/20 to-indigo-300/20 blur-3xl" />
         </div>
 
-        <div className="relative z-10 mx-auto grid min-h-[calc(100vh-64px)] max-w-7xl items-center gap-14 px-6 py-16 sm:py-20 lg:grid-cols-2 lg:gap-20 lg:px-8">
+        <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-14 px-6 py-14 sm:py-20 lg:grid-cols-2 lg:gap-20 lg:px-8 lg:min-h-[calc(100vh-64px)]">
           {/* Hero content */}
 
           <div className="max-w-2xl motion-safe:[animation:fade-in-up_0.8s_ease-out_both]">
@@ -248,7 +248,6 @@ export default function Home() {
                     <div className="px-2.5 py-2 text-slate-500 dark:text-slate-400">
                       Workspaces
                     </div>
-
                   </div>
 
                   <div className="mt-8 border-t border-slate-200/80 pt-4 dark:border-white/5">
@@ -310,9 +309,7 @@ export default function Home() {
                         {request.method}
                       </span>
 
-                      <span
-                        className="min-w-0 flex-1 truncate font-mono text-[10px] text-slate-600 dark:text-slate-300"
-                      >
+                      <span className="min-w-0 flex-1 truncate font-mono text-[10px] text-slate-600 dark:text-slate-300">
                         {request.endpoint}
                       </span>
 
@@ -358,7 +355,9 @@ export default function Home() {
 
                   <div className="mt-3 flex items-center justify-between rounded-lg border border-slate-200/80 bg-white/70 px-4 py-3 dark:border-white/5 dark:bg-white/5">
                     <div>
-                      <p className="text-[9px] text-slate-400">Saved with the request</p>
+                      <p className="text-[9px] text-slate-400">
+                        Saved with the request
+                      </p>
 
                       <p className="mt-1 text-[10px] font-medium text-slate-700 dark:text-slate-300">
                         Description · examples · notes
