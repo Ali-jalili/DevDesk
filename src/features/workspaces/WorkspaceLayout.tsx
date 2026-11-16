@@ -28,6 +28,10 @@ export default function WorkspaceLayout() {
   }>();
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [pendingEnvironmentSelection, setPendingEnvironmentSelection] = useState<{
+    workspaceId: string;
+    environmentId: string | null;
+  } | null>(null);
 
   const { data, isLoading, error } = useWorkspaceDetails(workspaceId);
 
@@ -45,6 +49,11 @@ export default function WorkspaceLayout() {
 
   const { mutate: updateEnvironment, isPending: isUpdatingEnvironment } =
     useUpdateWorkspaceEnvironment();
+
+  const selectedEnvironmentId =
+    pendingEnvironmentSelection?.workspaceId === workspaceId
+      ? pendingEnvironmentSelection.environmentId
+      : data?.active_environment_id;
 
   if (isLoading) {
     return <Loading />;
@@ -111,14 +120,16 @@ export default function WorkspaceLayout() {
 
                   <select
                     id="environment-switch"
-                    value={data.active_environment_id ?? ""}
+                    value={selectedEnvironmentId ?? ""}
                     disabled={isUpdatingEnvironment}
-                    onChange={(e) =>
-                      updateEnvironment({
-                        workspaceId,
-                        environmentId: e.target.value || null,
-                      })
-                    }
+                    onChange={(e) => {
+                      const environmentId = e.currentTarget.value || null;
+                      setPendingEnvironmentSelection({ workspaceId, environmentId });
+                      updateEnvironment(
+                        { workspaceId, environmentId },
+                        { onSettled: () => setPendingEnvironmentSelection(null) },
+                      );
+                    }}
                     className="
                       mt-3
                       w-full
