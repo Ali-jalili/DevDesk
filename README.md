@@ -123,7 +123,9 @@ Vite serves the app at `http://127.0.0.1:5173` by default. The configured port i
 
 ## Supabase migrations
 
-The clean-install schema and owner-scoped RLS policies are maintained in `supabase/migrations`. The scripts in `supabase/legacy-migrations` are retained for reference and are not the clean-install path.
+The versioned schema changes are maintained in `supabase/migrations`. The scripts in `supabase/legacy-migrations` are historical transition scripts; they are not part of a clean install and should not be run for a database that already has the current schema.
+
+### Fresh project
 
 With the Supabase CLI installed, authenticated, and linked to the intended project, inspect the pending migration plan before applying it:
 
@@ -133,6 +135,12 @@ supabase db push --remote
 ```
 
 Check the linked project and dry-run output before changing a remote database. The migrations establish workspace ownership and cascading relationships for environments, collections, variables, and requests.
+
+### Existing project
+
+Before using `supabase db push`, compare the live schema with the migrations. If changes were applied manually in the SQL Editor and `supabase_migrations.schema_migrations` does not exist, the CLI has no record of which versions were applied and may treat every local migration as pending. Reconcile the migration history with the live schema before using the CLI; do not run the legacy scripts as a shortcut.
+
+The latest reconciliation migration backfills `requests.updated_at`, enforces its default and non-null constraint, and limits the `authenticated` role to the CRUD privileges used by the app.
 
 ## Quality checks
 
