@@ -51,7 +51,8 @@ export default function WorkspaceLayout() {
     useUpdateWorkspaceEnvironment();
 
   const selectedEnvironmentId =
-    pendingEnvironmentSelection?.workspaceId === workspaceId
+    pendingEnvironmentSelection &&
+    pendingEnvironmentSelection.workspaceId === workspaceId
       ? pendingEnvironmentSelection.environmentId
       : data?.active_environment_id;
 

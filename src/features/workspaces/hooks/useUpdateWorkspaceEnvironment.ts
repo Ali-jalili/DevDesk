@@ -23,12 +23,11 @@ export default function useUpdateWorkspaceEnvironment() {
       await queryClient.cancelQueries({ queryKey });
 
       const previousWorkspace = queryClient.getQueryData<Workspaces | null>(queryKey);
-      if (previousWorkspace) {
-        queryClient.setQueryData<Workspaces | null>(queryKey, {
-          ...previousWorkspace,
-          active_environment_id: environmentId,
-        });
-      }
+      queryClient.setQueryData<Workspaces | null>(queryKey, (workspace) =>
+        workspace
+          ? { ...workspace, active_environment_id: environmentId }
+          : workspace,
+      );
 
       return { queryKey, previousWorkspace };
     },
