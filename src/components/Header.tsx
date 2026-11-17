@@ -26,7 +26,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-2 px-3 sm:px-6 lg:px-8">
         {/* Left — brand + mobile menu toggle */}
         <div className="flex min-w-0 items-center gap-2.5">
-          {user && (
+          {user && onMenuClick && (
             <button
               type="button"
               onClick={onMenuClick}
