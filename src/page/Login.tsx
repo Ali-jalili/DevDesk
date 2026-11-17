@@ -10,6 +10,7 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 
 import { FaSpinner } from "react-icons/fa6";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 import { NavLink, useNavigate } from "react-router-dom";
 
@@ -19,6 +20,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
 
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
@@ -175,6 +177,7 @@ export default function Login() {
                 </button>
               </div>
 
+              <div className="relative">
               <input
                 value={password}
                 onChange={(e) => {
@@ -189,19 +192,23 @@ export default function Login() {
                     }));
                   }
                 }}
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
                 name="password"
                 placeholder="Enter your password"
                 autoComplete="current-password"
                 aria-invalid={errors.password ? true : undefined}
                 aria-describedby={errors.password ? "login-password-error" : undefined}
-                className={`w-full rounded-xl border bg-white px-3.5 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:ring-4 focus:ring-indigo-500/10 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500 ${
+                className={`w-full rounded-xl border bg-white px-3.5 py-3 pr-12 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:ring-4 focus:ring-indigo-500/10 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500 ${
                   errors.password
                     ? "border-red-500 focus:border-red-500"
                     : "border-slate-200 focus:border-indigo-500 dark:border-white/10"
                 }`}
               />
+              <button type="button" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? "Hide password" : "Show password"} aria-pressed={showPassword} className="absolute inset-y-0 right-1 flex w-10 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 dark:hover:bg-white/10 dark:hover:text-slate-200">
+                {showPassword ? <FiEyeOff aria-hidden="true" /> : <FiEye aria-hidden="true" />}
+              </button>
+              </div>
 
               {errors.password && (
                 <p id="login-password-error" role="alert" className="mt-1 text-sm text-red-500">{errors.password}</p>

@@ -71,14 +71,14 @@ export default function AtlasPage() {
   });
 
   return (
-    <main className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-[1680px] flex-col gap-5 bg-slate-50 p-4 sm:gap-6 sm:p-6 lg:p-8 xl:p-10">
+    <main className="mx-auto flex min-h-[calc(100vh-4rem)] w-full min-w-0 max-w-[1680px] flex-col gap-5 bg-slate-50 p-4 sm:gap-6 sm:p-6 lg:p-8 xl:p-10">
       <AtlasHeader workspaceId={data.workspaceId} workspaceName={data.workspaceName} userName={firstName} requestCount={stats.total} collectionCount={data.lines.length} undocumentedCount={stats.undocumented.length} environments={data.environments} activeEnvironmentId={data.activeEnvironmentId} onImport={importRequest} />
       {stats.total === 0 && data.lines.length === 0 ? (
         <AtlasEmpty noWorkspace={false} />
       ) : (
         <div className="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1fr)_380px]">
           <AtlasMap lines={data.lines} workspaceId={data.workspaceId} filter={filter} onFilter={setFilter} />
-          <div className="grid min-w-0 gap-6 md:grid-cols-2 xl:grid-cols-1 xl:content-start">
+          <div className="grid min-w-0 gap-6 content-start">
             <RecentRequests requests={recent} workspaceId={data.workspaceId} />
             <AttentionList undocumented={undocumented} emptyLines={stats.emptyLines} environments={data.environments} workspaceId={data.workspaceId} coverage={stats.coverage} requestCount={stats.total} />
           </div>

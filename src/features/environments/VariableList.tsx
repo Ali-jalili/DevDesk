@@ -20,6 +20,7 @@ interface VariableListProps {
 
 export default function VariableList({ data }: VariableListProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingValueVisible, setEditingValueVisible] = useState(false);
   const [visibleValues, setVisibleValues] = useState<Record<string, boolean>>(
     {},
   );
@@ -30,6 +31,7 @@ export default function VariableList({ data }: VariableListProps) {
 
   function startEdit(item: EnvironmentVariableRecord) {
     setEditingId(item.id);
+    setEditingValueVisible(false);
 
     reset({
       key: item.key,
@@ -39,6 +41,7 @@ export default function VariableList({ data }: VariableListProps) {
 
   function cancelEdit() {
     setEditingId(null);
+    setEditingValueVisible(false);
     reset();
   }
 
@@ -104,10 +107,23 @@ export default function VariableList({ data }: VariableListProps) {
                 className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm"
               />
 
-              <input
-                {...register("value")}
-                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm"
-              />
+              <div className="relative">
+                <input
+                  {...register("value")}
+                  type={editingValueVisible ? "text" : "password"}
+                  aria-label={`Value for ${item.key}`}
+                  className="w-full rounded-xl border border-slate-200 py-2 pl-3 pr-12 text-sm"
+                />
+                <button
+                  type="button"
+                  onClick={() => setEditingValueVisible((visible) => !visible)}
+                  aria-label={editingValueVisible ? "Hide value" : "Show value"}
+                  aria-pressed={editingValueVisible}
+                  className="absolute inset-y-0 right-1 flex w-10 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+                >
+                  {editingValueVisible ? <FiEyeOff aria-hidden="true" size={16} /> : <FiEye aria-hidden="true" size={16} />}
+                </button>
+              </div>
 
               <div className="flex justify-end gap-2">
                 <button
@@ -142,8 +158,8 @@ export default function VariableList({ data }: VariableListProps) {
                   Value
                 </p>
 
-                <div className="mt-1 flex items-center justify-between gap-3">
-                  <p className="truncate text-sm text-slate-600">
+                <div className="mt-1 flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50/70 px-3 py-1.5">
+                  <p className="min-w-0 flex-1 break-all py-1 text-sm text-slate-600">
                     {visibleValues[item.id] ? item.value : "••••••••••"}
                   </p>
 
@@ -155,7 +171,8 @@ export default function VariableList({ data }: VariableListProps) {
                         ? `Hide value for ${item.key}`
                         : `Show value for ${item.key}`
                     }
-                    className="rounded-lg p-2 text-slate-400 hover:bg-slate-100"
+                    aria-pressed={!!visibleValues[item.id]}
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-slate-400 transition hover:bg-white hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
                   >
                     {visibleValues[item.id] ? (
                       <FiEyeOff size={16} />

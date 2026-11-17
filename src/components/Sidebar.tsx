@@ -120,7 +120,7 @@ export default function Sidebar({
           transition-all duration-200 ease-in-out
           ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
 
-          md:sticky md:z-30 md:translate-x-0
+          md:sticky md:top-16 md:z-30 md:h-auto md:min-h-[calc(100vh-4rem)] md:shrink-0 md:self-stretch md:translate-x-0
           ${collapsed ? "md:w-[69px]" : "md:w-60"}
         `}
       >

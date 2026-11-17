@@ -441,20 +441,20 @@ export default function Home() {
             </Reveal>
           </div>
 
-          <div className="mt-12 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="mt-12 grid min-w-0 gap-4 md:grid-cols-2 xl:grid-cols-3">
             {features.map((feature, featureIndex) => (
               <Reveal
                 key={feature.title}
                 delay={featureIndex * 90}
                 className={
                   featureIndex === 0
-                    ? "md:col-span-2 xl:col-span-2"
+                      ? "min-w-0 md:col-span-2 xl:col-span-2"
                     : featureIndex === 3
-                      ? "xl:col-span-2"
-                      : ""
+                      ? "min-w-0 xl:col-span-2"
+                      : "min-w-0"
                 }
               >
-                <article className="group relative flex h-full min-h-[17rem] flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white/85 p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-indigo-300/80 hover:shadow-xl hover:shadow-indigo-950/5 dark:border-white/10 dark:bg-slate-900/70 dark:hover:border-indigo-400/30 sm:p-7">
+                <article className="group relative flex h-full min-h-[17rem] min-w-0 flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white/85 p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-indigo-300/80 hover:shadow-xl hover:shadow-indigo-950/5 dark:border-white/10 dark:bg-slate-900/70 dark:hover:border-indigo-400/30 sm:p-7">
                   <div className="absolute -right-16 -top-20 h-48 w-48 rounded-full bg-gradient-to-br from-indigo-200/50 to-fuchsia-200/20 blur-3xl transition duration-500 group-hover:scale-125 dark:from-indigo-500/15 dark:to-fuchsia-500/10" />
                   <div className="relative flex items-start justify-between gap-4">
                     <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-50 to-violet-100 text-indigo-600 ring-1 ring-indigo-100 transition group-hover:from-indigo-600 group-hover:to-violet-600 group-hover:text-white group-hover:ring-transparent dark:from-indigo-400/15 dark:to-violet-400/10 dark:text-indigo-300 dark:ring-indigo-400/10">

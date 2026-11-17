@@ -15,7 +15,7 @@ function relativeTime(value: string) {
 }
 
 export function RecentRequests({ requests, workspaceId }: { requests: RecentRequest[]; workspaceId: string }) {
-  return <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+  return <section className="min-w-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
     <h2 className="text-base font-bold text-slate-900">Recently added</h2><p className="mt-1 text-sm text-slate-500">Your latest requests</p>
     {requests.length ? <ul className="mt-4 divide-y divide-slate-100">{requests.map((request) => { const color = getMethodColor(request.method); return <li key={request.id}><Link to={`/app/workspaces/${workspaceId}/collections/${request.collectionId}/requests/${request.id}`} className="flex min-h-[66px] items-center gap-3 py-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"><span className="rounded-lg px-2.5 py-1 text-[11px] font-bold" style={{ color: color.text, background: color.light }}>{request.method}</span><span className="min-w-0 flex-1"><b className="block truncate font-mono text-sm font-medium text-slate-800">{request.path}</b><span className="block truncate text-xs text-slate-400">{request.collectionName} · {relativeTime(request.createdAt)}</span></span><FiChevronRight className="shrink-0 text-slate-300" /></Link></li>; })}</ul> : <p className="mt-5 text-sm text-slate-500">No requests yet. Add the first stop to your API map.</p>}
   </section>;
@@ -28,9 +28,9 @@ export function AttentionList({ undocumented, emptyLines, environments, workspac
     ...(emptyLines[0] ? [{ label: `${emptyLines[0].name || "Collection"} has no requests`, action: "Add one", to: `/app/workspaces/${workspaceId}/collections/${emptyLines[0].id}`, icon: "□" }] : []),
     ...(zeroEnvironment ? [{ label: `${zeroEnvironment.name} has no variables`, action: "Open", to: `/app/workspaces/${workspaceId}/environments/${zeroEnvironment.id}`, icon: "{}" }] : []),
   ].slice(0, 3);
-  return <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+  return <section className="min-w-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
     <h2 className="text-base font-bold text-slate-900">Needs attention</h2>
-    <div className="mt-4"><div className="flex justify-between gap-3 text-sm"><span className="font-semibold text-slate-600">Documentation coverage</span><span className="text-slate-400">{requestCount - undocumented.length} of {requestCount} requests</span></div><div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-100"><div className="h-full rounded-full bg-indigo-600 transition-[width] duration-700" style={{ width: `${coverage}%` }} /></div></div>
+    <div className="mt-4"><div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-sm"><span className="font-semibold text-slate-600">Documentation coverage</span><span className="text-slate-400">{requestCount - undocumented.length} of {requestCount} requests</span></div><div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-100"><div className="h-full rounded-full bg-indigo-600 transition-[width] duration-700" style={{ width: `${coverage}%` }} /></div></div>
     {actions.length ? <ul className="mt-2 divide-y divide-slate-100">{actions.map((item) => <li key={item.label}><Link to={item.to} className="flex min-h-[58px] items-center gap-3 py-2 text-sm text-slate-600 hover:text-indigo-600"><span aria-hidden="true" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 font-mono text-slate-500">{item.icon}</span><span className="min-w-0 flex-1">{item.label}</span><span className="shrink-0 text-xs font-semibold text-indigo-600">{item.action}</span></Link></li>)}</ul> : <p className="mt-4 border-t border-slate-100 pt-4 text-sm font-medium text-emerald-700">Everything is documented</p>}
   </section>;
 }
